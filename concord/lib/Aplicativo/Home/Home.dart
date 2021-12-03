@@ -1,7 +1,5 @@
-import 'dart:html';
-
+import 'package:concord/Aplicativo/Home/Components/Button.dart';
 import 'package:flutter/material.dart';
-
 class Home extends StatefulWidget {
   const Home({ Key? key }) : super(key: key);
 
@@ -22,57 +20,43 @@ class _HomeState extends State<Home> {
           children: [
             Row(
               children: [
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: SizedBox(
-                      height: 40,
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style:ElevatedButton.styleFrom(
-                          primary: Colors.amber,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(25),
-                              bottomRight: Radius.circular(25)
-                            )
-                          )
-                        ),
-                        onPressed: () { print("asd"); },
-                        child: Align(child: Text("Conversas", style: TextStyle(fontSize: 20,color: Colors.white),)
-                        ),
-                      )
-                    )
-                  )
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Container(
-                    child: SizedBox(
-                      
-                      height: 40,
-                      width: double.infinity,
-                      
-                      child: ElevatedButton(
-                        style:ElevatedButton.styleFrom(
-                          primary: Colors.grey[700],
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(25),
-                              bottomRight: Radius.circular(25)
-                            )
-                          )
-                        ),
-                        onPressed: () { print("asd"); },
-                        child: Align(child: Text("Grupos", style: TextStyle(fontSize: 20,color: Colors.white),))
-                        ),
-                      )
-                    ),
-                  )
+                ButtonConversas(),
+                ButtonGrupos(),
+              
                 
               ],
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left:10, top: 20),
+                child: ListView(
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 1000,
+                      ///color: Colors.orange,
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 50,
+                            decoration: 
+                              BoxDecoration(borderRadius: BorderRadius.circular(360),
+                              image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: AssetImage("assets/Image/pp.jpg")
+                              ),
+                            )
+                          )
+                        ],  
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             )
-          ],),
+          ],
+        ),
       ),
     );
   }
