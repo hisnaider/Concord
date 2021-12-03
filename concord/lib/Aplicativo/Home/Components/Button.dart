@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 
 class ButtonConversas extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -21,7 +20,9 @@ class ButtonConversas extends StatelessWidget {
                 )
               )
             ),
-            onPressed: () { print("asd"); },
+            onPressed: () {
+              
+             },
             child: Align(
               child: Text(
                 "Conversas",

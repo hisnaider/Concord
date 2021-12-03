@@ -1,5 +1,7 @@
 import 'package:concord/Aplicativo/Home/Components/Button.dart';
+import 'package:concord/Aplicativo/Home/Conversas/listaconversas.dart';
 import 'package:flutter/material.dart';
+
 class Home extends StatefulWidget {
   const Home({ Key? key }) : super(key: key);
 
@@ -8,11 +10,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  static bool conversas = true;
+
+  void trocar (){
+    setState(() {
+      conversas = !conversas;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("asd"),
+        
+        actions: [
+          Icon(Icons.menu),
+          Icon(Icons.search),
+          
+        ],
 
       ),
       body: Container(
@@ -22,39 +37,11 @@ class _HomeState extends State<Home> {
               children: [
                 ButtonConversas(),
                 ButtonGrupos(),
-              
-                
               ],
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left:10, top: 20),
-                child: ListView(
-                  children: [
-                    Container(
-                      height: 50,
-                      width: 1000,
-                      ///color: Colors.orange,
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 50,
-                            width: 50,
-                            decoration: 
-                              BoxDecoration(borderRadius: BorderRadius.circular(360),
-                              image: DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage("assets/Image/pp.jpg")
-                              ),
-                            )
-                          )
-                        ],  
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+
+            if (conversas == false) ListaConversas()
+            else Container(height: 100,width: 100,color: Colors.green,)
           ],
         ),
       ),
