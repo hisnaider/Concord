@@ -1,6 +1,9 @@
 import 'package:concord/Aplicativo/Home/Components/Button.dart';
-import 'package:concord/Aplicativo/Home/Conversas/listaconversas.dart';
+///import 'package:concord/Aplicativo/Home/Components/HomeController.dart';
 import 'package:flutter/material.dart';
+
+///import 'Conversas/listaconversas.dart';
+///import 'Grupos/listagrupos.dart';
 
 class Home extends StatefulWidget {
   const Home({ Key? key }) : super(key: key);
@@ -12,7 +15,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   static bool conversas = true;
 
-  void trocar (){
+  void trocarasd (){
     setState(() {
       conversas = !conversas;
     });
@@ -39,9 +42,6 @@ class _HomeState extends State<Home> {
                 ButtonGrupos(),
               ],
             ),
-
-            if (conversas == false) ListaConversas()
-            else Container(height: 100,width: 100,color: Colors.green,)
           ],
         ),
       ),
