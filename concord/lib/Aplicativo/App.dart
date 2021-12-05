@@ -1,5 +1,8 @@
-import 'package:concord/Aplicativo/Home/Home.dart';
 import 'package:flutter/material.dart';
+
+import 'Pages/Home/Conversas/chat/chat.dart';
+import 'Pages/Home/Home.dart';
+
 
 class App extends StatelessWidget {
   const App({ Key? key }) : super(key: key);
