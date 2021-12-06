@@ -15,9 +15,9 @@ class _PrevmensagemState extends State<Prevmensagem> {
             child: Container(
               height: 55,
               width: 100, 
-              color: Colors.grey[900],
+              decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.grey[900]),
               child: ListView(
-                padding: EdgeInsets.all(5),
+                padding: EdgeInsets.symmetric(vertical: 10,horizontal: 15),
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -27,7 +27,7 @@ class _PrevmensagemState extends State<Prevmensagem> {
                         child: Container(
                           child: Text(
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi erat sapien, porta vel lobortis at, convallis quis nisl.",
-                            style: TextStyle(fontSize: 17)
+                            style: TextStyle(fontSize: 15)
                           ),
                         ),
                       ),

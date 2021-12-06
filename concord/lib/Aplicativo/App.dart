@@ -1,3 +1,5 @@
+import 'package:concord/Aplicativo/Pages/Login/Registrar/registrar.dart';
+import 'package:concord/Aplicativo/Pages/Login/login.dart';
 import 'package:flutter/material.dart';
 
 import 'Pages/Home/Conversas/chat/chat.dart';
@@ -15,7 +17,7 @@ class App extends StatelessWidget {
         primaryColor: Colors.amber,
         brightness: Brightness.dark
       ),
-      home: Home(),
+      home: Login(),
       
     );
   }

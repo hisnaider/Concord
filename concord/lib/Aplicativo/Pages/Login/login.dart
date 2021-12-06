@@ -30,9 +30,14 @@ class _LoginState extends State<Login> {
             flex: 4,
             child: Column(
               children: [
-                ///Container(width: double.infinity, margin: EdgeInsets.only(top:30, right: 30, bottom: 15, left: 30),child: Text("Login:",style: TextStyle(fontSize: 30),)),
                 Padding(
-                  padding: const EdgeInsets.only(top: 60,bottom: 15),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Container(
+                    width: double.infinity,
+                    child: Text("Login", style: TextStyle(fontSize: 30),)),
+                ),               
+                Padding(
+                  padding: const EdgeInsets.only(top: 10,bottom: 15),
                   child: CampoDeTextoEmail(),
                 ),
                 Padding(
@@ -50,7 +55,11 @@ class _LoginState extends State<Login> {
                   child: LoginButton(),
                 ),
 
-                Container(height: 2,width: 500,color: Colors.grey[800],),
+                Divider(
+                  height: 2,
+                  color: Colors.black
+                ),
+                ///Container(height: 2,width: 500,color: Colors.grey[800],),
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: Center(child: Text("Caso não tenha uma conta, crie uma, é de graça!!!",style: TextStyle(fontSize: 17),textAlign: TextAlign.center,)),

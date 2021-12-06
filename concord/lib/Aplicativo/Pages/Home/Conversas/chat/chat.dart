@@ -25,7 +25,7 @@ class _ChatState extends State<Chat> {
             ),
           ),
           Container(
-            height: 40+(20*linhas),
+            height: 45+(20*linhas),
             width:double.infinity,
             color: Colors.amber,
             child: Padding(
@@ -42,30 +42,30 @@ class _ChatState extends State<Chat> {
                     ),
                   ),
                   Expanded(
-                    flex: 1,
-                    child: ClipPath(
-                      clipper: ChatClipper() ,
-                      child: Container(
-                        height: double.infinity,
-                        color: Colors.grey[800],
-                        child: TextField(
-                          onChanged: (text){
-                            setState(() {
-                              if (linhas <= 3) {
-                                linhas = '\n'.allMatches(text).length+0;
-                              }
-                              
-                            });
-                          },
-                          maxLines: 5,
-                          style: TextStyle(fontSize: 17),
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 10),isDense: true,
-                          ),
+                    flex: 1,        
+                    child: Container(
+                      height: 40+(20*linhas),
+                      ///color: Colors.grey[800],
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: Colors.grey[800]),
+                      child: TextField(
+                        onChanged: (text){
+                          setState(() {
+                            double n = '\n'.allMatches(text).length+0;
+                            if (n <= 3) {
+                              linhas = n;
+                              print(linhas);
+                            }                      
+                          });
+                        },
+                        maxLines: 5,
+                        style: TextStyle(fontSize: 17),
+                        decoration: InputDecoration(
+                          contentPadding: EdgeInsets.only(left: 20,right: 20,top: 10,bottom: 10),
+                          isDense: true,
+                          border: OutlineInputBorder(borderSide: BorderSide.none)
                         ),
-                    
                       ),
-                    )
+                    ),
                   ),
                   Container(
                     width: 50,

@@ -5,21 +5,18 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: ButtonClipper(),
-      child: GestureDetector(
+    return GestureDetector(
         onTap: (){print("asd");},
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          width: 200,
+          width: 150,
           height: 40,
-          color: Colors.amber,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: Colors.amber),
             child: Center(
-              child: Text("Entrar",style: TextStyle(fontSize: 25,color: Colors.black),
+              child: Text("Entrar",style: TextStyle(fontSize: 22,color: Colors.black),
             )
           ),
         ),
-      ),
     );
   }
 }
@@ -29,22 +26,20 @@ class RegistrarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipPath(
-      clipper: ButtonClipper(),
-      child: GestureDetector(
+    return GestureDetector(
         onTap: (){print("asd");},
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
-          width: 200,
+          width: 150,
           height: 40,
-          color: Colors.amber,
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: Colors.amber),
             child: Center(
-              child: Text("Registrar",style: TextStyle(fontSize: 25,color: Colors.black),
+              child: Text("Registrar",style: TextStyle(fontSize: 22,color: Colors.black),
             )
           ),
         ),
-      ),
-    );
+      );
+    
   }
 }
 
