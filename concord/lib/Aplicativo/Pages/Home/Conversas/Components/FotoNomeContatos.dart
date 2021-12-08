@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FotoNome extends StatefulWidget {
-  const FotoNome({ Key? key }) : super(key: key);
+  String foto;
+  String nome;
+  FotoNome({ Key? key, required this.foto, required this.nome }) : super(key: key);
 
   @override
   _FotoNomeState createState() => _FotoNomeState();
@@ -22,8 +24,9 @@ class _FotoNomeState extends State<FotoNome> {
               decoration: 
                 BoxDecoration(borderRadius: BorderRadius.circular(360),
                 image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage("assets/Image/pp.jpg")
+                  fit: BoxFit.cover,
+                  image: NetworkImage(widget.foto),
+                  
                 ),
               )
             ),
@@ -33,7 +36,7 @@ class _FotoNomeState extends State<FotoNome> {
               margin: EdgeInsets.only(left: 15,right: 10),
               width: 100,
               child: Text(
-                "Julia Gonzalez",
+                widget.nome,
                 style: TextStyle(fontSize: 17))
             ),
           ),

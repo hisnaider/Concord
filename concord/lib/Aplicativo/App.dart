@@ -17,7 +17,12 @@ class App extends StatelessWidget {
         primaryColor: Colors.amber,
         brightness: Brightness.dark
       ),
-      home: Login(),
+      home: Home(),
+      /*routes: {
+        "/": (context) => Home(),
+        "/Login": (context) => Login(),
+        "/Register": (context) => Registrar(),
+      },*/
       
     );
   }

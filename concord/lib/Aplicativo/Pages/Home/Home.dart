@@ -1,5 +1,6 @@
 
 ///import 'package:concord/Aplicativo/Home/Components/HomeController.dart';
+import 'package:concord/Aplicativo/Pages/Home/Grupos/listagrupos.dart';
 import 'package:flutter/material.dart';
 
 import 'Components/Button.dart';
@@ -8,22 +9,22 @@ import 'Conversas/listaconversas.dart';
 ///import 'Conversas/listaconversas.dart';
 ///import 'Grupos/listagrupos.dart';
 
+// ignore: must_be_immutable
 class Home extends StatefulWidget {
-  const Home({ Key? key }) : super(key: key);
+  Home({ Key? key }) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  static bool conversas = true;
 
-  void trocarasd (){
-    setState(() {
-      conversas = !conversas;
-    });
+  bool conversa = true;
+  @override
+  void initState() {
+    super.initState();
+      conversa = true;
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +64,7 @@ class _HomeState extends State<Home> {
         actions: [
           Icon(Icons.search),
           
-        ],
+        ],  
 
       ),
       body: Container(
@@ -72,14 +73,15 @@ class _HomeState extends State<Home> {
             Row(
               children: [
                 ButtonConversas(),
-                Container(height: 40,width: 1),
                 ButtonGrupos(),
               ],
             ),
-            ListaConversas()
+            ListaConversas(visivel: conversa),
+
           ],
         ),
       ),
     );
   }
 }
+ 

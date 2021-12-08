@@ -100,8 +100,6 @@ class RegistrarCampoDeTextoBirth extends StatefulWidget {
 }
 
 class _RegistrarCampoDeTextoBirthState extends State<RegistrarCampoDeTextoBirth> {
-  String formatar_texto = "  /  /    ";
-  TextEditingController myController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -129,7 +127,6 @@ class _RegistrarCampoDeTextoBirthState extends State<RegistrarCampoDeTextoBirth>
               height: 40,
               alignment: Alignment.center,
               child: TextField(
-                controller: myController,
                 maxLines: 1,
                 keyboardType: TextInputType.datetime,
                 style: TextStyle(fontSize: 17),
@@ -138,7 +135,6 @@ class _RegistrarCampoDeTextoBirthState extends State<RegistrarCampoDeTextoBirth>
                   border: OutlineInputBorder(borderSide: BorderSide.none),
                   hintText: "Data de Nascimento"
                 ),
-
               ),
             )
           ),

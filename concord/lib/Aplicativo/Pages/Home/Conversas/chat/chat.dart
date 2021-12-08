@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Chat extends StatefulWidget {
-  const Chat({ Key? key }) : super(key: key);
+  final String foto;
+  final String nome;
+  const Chat({ Key? key, required this.foto, required this.nome }) : super(key: key);
 
   @override
   _ChatState createState() => _ChatState();
@@ -13,13 +15,28 @@ class _ChatState extends State<Chat> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            CircleAvatar(backgroundImage: NetworkImage(widget.foto)),
+            Padding(
+              padding: const EdgeInsets.only(left: 20),
+              child: Text(widget.nome),
+            )
+
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Expanded(flex: 1,
             child: ListView(
               children: [
-                
+                Container(
+                  height: 50,
+                  width: 50,
+                  color: Colors.amber,
+                )
               ],
             ),
           ),

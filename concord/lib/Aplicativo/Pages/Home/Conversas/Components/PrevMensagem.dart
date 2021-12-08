@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Prevmensagem extends StatefulWidget {
-  const Prevmensagem({ Key? key }) : super(key: key);
+  final mensagem;
+  const Prevmensagem({ Key? key, this.mensagem }) : super(key: key);
 
   @override
   _PrevmensagemState createState() => _PrevmensagemState();
@@ -26,7 +27,7 @@ class _PrevmensagemState extends State<Prevmensagem> {
                       Expanded(
                         child: Container(
                           child: Text(
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi erat sapien, porta vel lobortis at, convallis quis nisl.",
+                            widget.mensagem,
                             style: TextStyle(fontSize: 15)
                           ),
                         ),
