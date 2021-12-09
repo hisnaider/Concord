@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class Chat extends StatefulWidget {
   final String foto;
@@ -31,14 +32,103 @@ class _ChatState extends State<Chat> {
         children: [
           Expanded(flex: 1,
             child: ListView(
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  color: Colors.amber,
-                )
-              ],
-            ),
+                padding: EdgeInsets.all(20),
+                children: [
+
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 50,
+                        width: 250,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 100,
+                        width: 250,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.grey[600]),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 50,
+                        width: 275,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.grey[600]),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 100,
+                        width: 300,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.grey[600]),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 50,
+                        width: 100,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 100,
+                        width: 300,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                      ),
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Container(
+                        height: 100,
+                        width: 300,
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            
+          ),
+          SizedBox(
+            height: 20,
           ),
           Container(
             height: 45+(20*linhas),

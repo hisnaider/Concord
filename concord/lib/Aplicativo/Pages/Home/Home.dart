@@ -1,6 +1,7 @@
 
 ///import 'package:concord/Aplicativo/Home/Components/HomeController.dart';
 import 'package:concord/Aplicativo/Pages/Home/Grupos/listagrupos.dart';
+import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
 
 import 'Components/Button.dart';
@@ -18,6 +19,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  final Autenticador _auth = Autenticador(); 
 
   bool conversa = true;
   @override
@@ -54,6 +57,7 @@ class _HomeState extends State<Home> {
               subtitle: Text("Configurar App"),
             ),
             ListTile(
+              onTap: () async {await _auth.deslogar();},
               leading: Container(height: 50,width: 1,color: Colors.amber,),
               title: Text("Logout"),
               subtitle: Text("Sair da conta"),

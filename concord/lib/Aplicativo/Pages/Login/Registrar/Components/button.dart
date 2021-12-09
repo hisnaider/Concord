@@ -5,9 +5,7 @@ class RRegistrarButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: (){print("asd");},
-        child: Container(
+    return Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           width: 200,
           height: 50,
@@ -16,8 +14,7 @@ class RRegistrarButton extends StatelessWidget {
               child: Text("Registrar",style: TextStyle(fontSize: 25,color: Colors.black),
             )
           ),
-        ),
-      );
+        );
     
   }
 }

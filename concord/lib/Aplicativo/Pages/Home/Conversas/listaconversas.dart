@@ -30,17 +30,10 @@ class _ListaConversasState extends State<ListaConversas> {
     return Column(
       children: [
         GestureDetector(
-          onTap: () {
-            Navigator.of(context).push(MaterialPageRoute(builder: (context)=>Chat(nome: i[1], foto: i[0],)));
-          },
-          child: Container(
-            height: 90,
-            width: double.infinity,
-            color: Colors.grey[850],
             child: Contato(foto: i[0], nome: i[1],mensagem: i[2]
             ),
           )
-        ),
+        ,
         Divider(
           height: 5,
           color: Colors.grey[840],
@@ -62,13 +55,9 @@ class _ListaConversasState extends State<ListaConversas> {
                   itemBuilder: (BuildContext context, int index) {
                     return teste(lista[index]);
                   },
-                  
-                ),
-                /*child: ListView(
-                  children: lista.map((lista) => teste(lista)).toList()
-                ),*/
-              ),
-            ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:concord/Aplicativo/Pages/Login/Registrar/registrar.dart';
 import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
@@ -27,7 +28,7 @@ class RegistrarButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: (){print("asd");},
+        onTap: () {Navigator.push(context, MaterialPageRoute(builder: (context)=>Registrar()));},
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 20),
           width: 150,

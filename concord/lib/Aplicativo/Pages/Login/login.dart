@@ -1,3 +1,4 @@
+import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
 
 import 'Components/button.dart';
@@ -12,6 +13,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final Autenticador _auth = Autenticador();
+  String email="";
+  String senha="";
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -37,13 +42,39 @@ class _LoginState extends State<Login> {
                     child: Text("Login", style: TextStyle(fontSize: 30),)),
                 ),               
                 Padding(
-                  padding: const EdgeInsets.only(top: 10,bottom: 15),
-                  child: CampoDeTextoEmail(),
-                ),
+                    padding: const EdgeInsets.only(top: 10,bottom: 15),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
+                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      child: TextFormField(
+                        keyboardType: TextInputType.text,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 17),
+                        decoration: decemail,
+                        onChanged: (valor){
+                          setState(() => email = valor);
+                        },
+                      ),
+                    ),
+                  ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  child: CampoDeTextoSenha(),
-                ),
+                    padding: const EdgeInsets.only(top: 20,bottom: 15),
+                    child: Container(
+                      height: 40,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
+                      margin: EdgeInsets.symmetric(horizontal: 50),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontSize: 17),
+                        decoration: decsenha,
+                        onChanged: (valor){
+                          setState(() => email = valor);
+                        },
+                      ),
+                    ),
+                  ),
                 Container(
                   width:double.infinity,
                   margin: EdgeInsets.symmetric(horizontal: 50),
@@ -54,14 +85,25 @@ class _LoginState extends State<Login> {
                   padding: const EdgeInsets.symmetric(vertical: 30),
                   child: LoginButton(),
                 ),
+                GestureDetector(
+                  onTap: () async {
+                    dynamic resultado = await _auth.sign();
+                    if (resultado == null) print("erro");
+                    else {
+                      print("certo");
+                      print(resultado.id);
+                    }
+                  },
+                  child: Text("Click aqui pra logar de forma anonima"),
+                ),
 
                 Divider(
-                  height: 2,
+                  height: 20,
                   color: Colors.black
                 ),
                 ///Container(height: 2,width: 500,color: Colors.grey[800],),
                 Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
                   child: Center(child: Text("Caso não tenha uma conta, crie uma, é de graça!!!",style: TextStyle(fontSize: 17),textAlign: TextAlign.center,)),
                 ),
                 RegistrarButton(),

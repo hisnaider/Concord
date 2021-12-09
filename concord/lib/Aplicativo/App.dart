@@ -1,9 +1,14 @@
 import 'package:concord/Aplicativo/Pages/Login/Registrar/registrar.dart';
 import 'package:concord/Aplicativo/Pages/Login/login.dart';
+import 'package:concord/Services/auth.dart';
+import 'package:concord/Services/myuser.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'Pages/Home/Conversas/chat/chat.dart';
 import 'Pages/Home/Home.dart';
+import 'Pages/wrapper.dart';
 
 
 class App extends StatelessWidget {
@@ -11,19 +16,25 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "nome",
-      theme: ThemeData(
-        primaryColor: Colors.amber,
-        brightness: Brightness.dark
-      ),
-      home: Home(),
-      /*routes: {
-        "/": (context) => Home(),
-        "/Login": (context) => Login(),
-        "/Register": (context) => Registrar(),
-      },*/
+    return StreamProvider<Myuser?>.value(
+      value: Autenticador().user,
+      initialData: null,
+      child: MaterialApp(
+        title: "nome",
+        theme: ThemeData(
+          primaryColor: Colors.amber,
+          brightness: Brightness.dark
+        ),
+        home: Wrapper()
+        )
+      );
+        /*routes: {
+          "/": (context) => Home(),
+          "/Login": (context) => Login(),
+          "/Register": (context) => Registrar(),
+        },*/
+        
       
-    );
+    
   }
 }
