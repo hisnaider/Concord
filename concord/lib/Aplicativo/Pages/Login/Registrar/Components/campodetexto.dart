@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 InputDecoration decuser = InputDecoration(
           contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
+          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(40))),
+          filled: true,
+          fillColor: Colors.grey[700],
           hintText: "Nome do usuario",
           prefixIcon: Padding(
             padding: EdgeInsets.zero,
@@ -16,7 +18,9 @@ InputDecoration decuser = InputDecoration(
 
 InputDecoration decemail = InputDecoration(
           contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
+          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(40))),
+          filled: true,
+          fillColor: Colors.grey[700],
           hintText: "Email",
           prefixIcon: Padding(
             padding: EdgeInsets.zero,
@@ -30,7 +34,9 @@ InputDecoration decemail = InputDecoration(
 
 InputDecoration decbirth = InputDecoration(
           contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
+          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(40))),
+          filled: true,
+          fillColor: Colors.grey[700],
           hintText: "Data de nascimento",
           prefixIcon: Padding(
             padding: EdgeInsets.zero,
@@ -44,7 +50,9 @@ InputDecoration decbirth = InputDecoration(
 
 InputDecoration decsenha = InputDecoration(
           contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
+          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(40))),
+          filled: true,
+          fillColor: Colors.grey[700],
           hintText: "Senha",
           prefixIcon: Padding(
             padding: EdgeInsets.zero,
@@ -58,7 +66,9 @@ InputDecoration decsenha = InputDecoration(
 
 InputDecoration decconfirmsenha = InputDecoration(
           contentPadding: EdgeInsets.zero,
-          border: OutlineInputBorder(borderSide: BorderSide.none),
+          border: OutlineInputBorder(borderSide: BorderSide.none, borderRadius: BorderRadius.all(Radius.circular(40))),
+          filled: true,
+          fillColor: Colors.grey[700],
           hintText: "Confirmar senha",
           prefixIcon: Padding(
             padding: EdgeInsets.zero,

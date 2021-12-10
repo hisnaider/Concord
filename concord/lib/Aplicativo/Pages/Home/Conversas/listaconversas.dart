@@ -1,12 +1,10 @@
-import 'package:concord/Aplicativo/Pages/Home/Conversas/chat/chat.dart';
 import 'package:flutter/material.dart';
 
 import 'Components/Contatos.dart';
 
 // ignore: must_be_immutable
 class ListaConversas extends StatefulWidget {
-  bool visivel;
-  ListaConversas({ Key? key, required this.visivel }) : super(key: key);
+  ListaConversas({ Key? key}) : super(key: key);
 
   @override
   _ListaConversasState createState() => _ListaConversasState();
@@ -49,7 +47,6 @@ class _ListaConversasState extends State<ListaConversas> {
             child: Padding(
               padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
               child: Visibility(
-                visible: widget.visivel,
                 child: ListView.builder(
                   itemCount: lista.length,
                   itemBuilder: (BuildContext context, int index) {

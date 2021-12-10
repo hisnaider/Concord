@@ -15,6 +15,8 @@ class Registrar extends StatefulWidget {
 class _RegistrarState extends State<Registrar> {
 
   final Autenticador _auth = Autenticador();
+  final _formKey = GlobalKey<FormState>();
+
   String nome="";
   String email="";
   String nasc="";
@@ -33,116 +35,105 @@ class _RegistrarState extends State<Registrar> {
                 Container(color: Colors.amber,)
               ],
             ),
-
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Container(
+              width: double.infinity,
+              child: Text("Registrar", style: TextStyle(fontSize: 30),
+              )
+            ),
           ),
           Expanded(
             flex: 4,
-            child: Form(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Container(
-                      width: double.infinity,
-                      child: Text("Registrar", style: TextStyle(fontSize: 30),)),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20,bottom: 15),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 17),
-                        decoration: decuser,
-                        onChanged: (valor){
-                          setState(() => nome = valor);
-                        },
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width-100,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 85,
+                        child: TextFormField(
+                          validator: (val) => val!.isEmpty ? "Coloque seu nome" : null,
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17),
+                          decoration: decuser,
+                          onChanged: (valor){
+                            setState(() => nome = valor);
+                          },
+                        ),
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20,bottom: 15),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        keyboardType: TextInputType.emailAddress,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 17),
-                        decoration: decemail,
-                        onChanged: (valor){
-                          setState(() => email = valor);
-                        },
+                      Container(
+                        height: 85,
+                        child: TextFormField(
+                          validator: (val) => val!.isEmpty ? "Coloque seu email" : null,
+                          keyboardType: TextInputType.emailAddress,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17),
+                          decoration: decemail,
+                          onChanged: (valor){
+                            setState(() => email = valor);
+                          },
+                        ),
                       ),
-                    ),
-                  ),
-                 Padding(
-                    padding: const EdgeInsets.only(top: 20,bottom: 15),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 17),
-                        decoration: decbirth,
-                        onChanged: (valor){
-                          setState(() => nasc = valor);
-                        },
+                      Container(
+                        height: 85,
+                        child: TextFormField(
+                          validator: (val) => val!.isEmpty ? "Coloque a data do seu nascimento" : null,
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17),
+                          decoration: decbirth,
+                          onChanged: (valor){
+                            setState(() => nasc = "asdasd$valor");
+                          },
+                        ),
                       ),
-                    ),
+                      Container(
+                        height: 85,
+                        child: TextFormField(
+                          validator: (val) => val!.length < 5 ? "A senha deve ter no mínimo 6 caracteres " : null,
+                          obscureText: true,
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17),
+                          decoration: decsenha,
+                          onChanged: (valor){
+                            setState(() => senha = valor);
+                          },
+                        ),
+                      ),  
+                      Container(
+                        height: 85,
+                        child: TextFormField(
+                          validator: (val) => val! != senha ? "As senhas não são iguais" : null,
+                          obscureText: true,
+                          keyboardType: TextInputType.text,
+                          textAlign: TextAlign.left,
+                          style: TextStyle(fontSize: 17),
+                          decoration: decconfirmsenha,
+                          onChanged: (valor){
+                            setState(() => confirmsenha = valor);
+                          },
+                        ),
+                      ),       
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 30),
+                        child: GestureDetector(
+                          child: RRegistrarButton(),
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()){
+                              dynamic resultado = await _auth.RegistrarUsuario(nome, email, nasc, senha);
+                            }      
+                          },
+                        ),
+                      )
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20,bottom: 15),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 17),
-                        decoration: decsenha,
-                        onChanged: (valor){
-                          setState(() => senha = valor);
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20,bottom: 15),
-                    child: Container(
-                      height: 40,
-                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(40), color: Colors.grey[700]),
-                      margin: EdgeInsets.symmetric(horizontal: 50),
-                      child: TextFormField(
-                        obscureText: true,
-                        keyboardType: TextInputType.text,
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontSize: 17),
-                        decoration: decconfirmsenha,
-                        onChanged: (valor){
-                          setState(() => confirmsenha = valor);
-                        },
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 60),
-                    child: GestureDetector(
-                      child: RRegistrarButton(),
-                      onTap: (){
-                        print("nome: $nome\nemail: $email\nnascimento: $nasc\nsenha: $senha\nconfirmas senha: $confirmsenha");
-                      },
-                      ),
-                  )
-                ],
+                ),
               ),
             )
           )

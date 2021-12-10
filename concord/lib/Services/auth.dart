@@ -28,6 +28,19 @@ class Autenticador{
   }
 
 
+  Future RegistrarUsuario(String nome, String email, String birth, String senha) async {
+    try {
+      UserCredential resultado = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
+      User? usuario = resultado.user;
+      return  _usuariofirebase(usuario);
+      
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+
 
 
   Future deslogar() async {

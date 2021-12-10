@@ -7,9 +7,6 @@ import 'package:flutter/material.dart';
 import 'Components/Button.dart';
 import 'Conversas/listaconversas.dart';
 
-///import 'Conversas/listaconversas.dart';
-///import 'Grupos/listagrupos.dart';
-
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
   Home({ Key? key }) : super(key: key);
@@ -28,6 +25,13 @@ class _HomeState extends State<Home> {
     super.initState();
       conversa = true;
   }
+
+  conversagrupo(a) {
+    if (a)
+      return ListaConversas();
+    else return ListaGrupos();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -65,6 +69,7 @@ class _HomeState extends State<Home> {
         ],),
       ),
       appBar: AppBar(
+        elevation: 0,
         actions: [
           Icon(Icons.search),
           
@@ -76,11 +81,32 @@ class _HomeState extends State<Home> {
           children: [
             Row(
               children: [
-                ButtonConversas(),
-                ButtonGrupos(),
+                Expanded(
+                  child: TextButton(
+                    onPressed: (){
+                      setState(() {
+                        if (!conversa) conversa = !conversa;
+                      });
+                    }, 
+                    style:button(conversa),
+                    child: Text("Conversa")),
+                ),
+                Expanded(
+                  child: TextButton(
+                      onPressed: (){
+                        setState(() {
+                        if (conversa) conversa = !conversa;
+                        });
+                      }, 
+                      style:button(!conversa),
+                      child: Text("Grupos")),
+                  ),
+                ///ButtonConversas(),
+                ///ButtonGrupos(),
               ],
             ),
-            ListaConversas(visivel: conversa),
+            conversagrupo(conversa)
+            
 
           ],
         ),
@@ -88,4 +114,21 @@ class _HomeState extends State<Home> {
     );
   }
 }
- 
+
+// ignore: must_be_immutable
+/*class ConversaGrupo extends StatefulWidget {
+  bool conversas;
+  ConversaGrupo({ Key? key, required this.conversas}) : super(key: key);
+
+  @override
+  _ConversaGrupoState createState() => _ConversaGrupoState();
+}
+
+class _ConversaGrupoState extends State<ConversaGrupo> {
+  @override
+  Widget build(BuildContext context) {
+    if (widget.conversas)
+      return ListaConversas();
+    else return ListaGrupos();
+  }
+}*/

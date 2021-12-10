@@ -4,8 +4,7 @@ import 'Components/Grupos.dart';
 
 // ignore: must_be_immutable
 class ListaGrupos extends StatefulWidget {
-  bool visivel;
-  ListaGrupos({ Key? key, required this.visivel }) : super(key: key);
+
 
   @override
   _ListaGruposState createState() => _ListaGruposState();
@@ -18,7 +17,6 @@ class _ListaGruposState extends State<ListaGrupos> {
             child: Padding(
               padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
               child: Visibility(
-                visible: widget.visivel,
                 child: ListView(
                   children: [
                     GestureDetector(
