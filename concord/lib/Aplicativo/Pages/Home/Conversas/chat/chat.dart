@@ -191,20 +191,3 @@ class _ChatState extends State<Chat> {
     );
   }
 }
-
-class ChatClipper extends CustomClipper<Path> {
-
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0, 0);
-    path.lineTo(size.width-20, 0);
-    path.lineTo(size.width, size.height);
-    path.lineTo(20, size.height);
-
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) {return oldClipper != this;}
-}

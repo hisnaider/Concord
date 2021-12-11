@@ -1,8 +1,9 @@
+import 'package:concord/Aplicativo/Components/campotexto.dart';
+import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Aplicativo/Pages/Login/Registrar/Components/button.dart';
+import 'package:concord/Aplicativo/Pages/Login/login.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
-
-import 'Components/campodetexto.dart';
 
 
 class Registrar extends StatefulWidget {
@@ -22,10 +23,11 @@ class _RegistrarState extends State<Registrar> {
   String nasc="";
   String senha="";
   String confirmsenha="";
+  bool carregando = false;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
+    return carregando ? TelaDeLoading() : Material(
       child: Column(
         children: [
           Expanded(
@@ -60,7 +62,10 @@ class _RegistrarState extends State<Registrar> {
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 17),
-                          decoration: decuser,
+                          decoration: campotextodec.copyWith(
+                                hintText: "Nome de usuario",
+                                prefixIcon: icone(Icons.person_outline)
+                              ),
                           onChanged: (valor){
                             setState(() => nome = valor);
                           },
@@ -73,7 +78,10 @@ class _RegistrarState extends State<Registrar> {
                           keyboardType: TextInputType.emailAddress,
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 17),
-                          decoration: decemail,
+                          decoration: campotextodec.copyWith(
+                                hintText: "Email",
+                                prefixIcon: icone(Icons.email_outlined)
+                              ),
                           onChanged: (valor){
                             setState(() => email = valor);
                           },
@@ -86,9 +94,12 @@ class _RegistrarState extends State<Registrar> {
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 17),
-                          decoration: decbirth,
+                          decoration: campotextodec.copyWith(
+                                hintText: "Data de aniversario",
+                                prefixIcon: icone(Icons.cake_outlined)
+                              ),
                           onChanged: (valor){
-                            setState(() => nasc = "asdasd$valor");
+                            setState(() => nasc = "$valor");
                           },
                         ),
                       ),
@@ -100,7 +111,10 @@ class _RegistrarState extends State<Registrar> {
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 17),
-                          decoration: decsenha,
+                          decoration: campotextodec.copyWith(
+                                hintText: "Senha",
+                                prefixIcon: icone(Icons.vpn_key_outlined)
+                              ),
                           onChanged: (valor){
                             setState(() => senha = valor);
                           },
@@ -114,7 +128,10 @@ class _RegistrarState extends State<Registrar> {
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
                           style: TextStyle(fontSize: 17),
-                          decoration: decconfirmsenha,
+                          decoration: campotextodec.copyWith(
+                                hintText: "Confirmar senha",
+                                prefixIcon: icone(Icons.vpn_key_outlined)
+                              ),
                           onChanged: (valor){
                             setState(() => confirmsenha = valor);
                           },
@@ -125,9 +142,15 @@ class _RegistrarState extends State<Registrar> {
                         child: GestureDetector(
                           child: RRegistrarButton(),
                           onTap: () async {
+                            
                             if (_formKey.currentState!.validate()){
-                              dynamic resultado = await _auth.RegistrarUsuario(nome, email, nasc, senha);
-                            }      
+                              setState(() => carregando = true);
+                              dynamic resultado = await _auth.registrarUsuario(nome, email, nasc, senha);
+                              if (resultado == null){
+                                setState(() => carregando = false);
+                              }
+                            }
+                            Navigator.of(context).pop(MaterialPageRoute(builder: (context)=>Login()));
                           },
                         ),
                       )

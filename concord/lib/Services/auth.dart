@@ -1,3 +1,4 @@
+import 'package:concord/Services/database.dart';
 import 'package:concord/Services/myuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,10 +29,26 @@ class Autenticador{
   }
 
 
-  Future RegistrarUsuario(String nome, String email, String birth, String senha) async {
+  Future logarusuario(/*String nome,*/ String email,/* String birth,*/ String senha) async {
+    try {
+      UserCredential resultado = await _auth.signInWithEmailAndPassword(email: email, password: senha);
+      User? usuario = resultado.user;
+      return  _usuariofirebase(usuario);
+      
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
+
+  Future registrarUsuario(String nome, String email, String birth, String senha) async {
     try {
       UserCredential resultado = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
       User? usuario = resultado.user;
+
+      await DatabaseService(uid: usuario!.uid).atualizarDadosUser(nome, birth, "");
+
       return  _usuariofirebase(usuario);
       
     } catch (e) {

@@ -114,21 +114,3 @@ class _HomeState extends State<Home> {
     );
   }
 }
-
-// ignore: must_be_immutable
-/*class ConversaGrupo extends StatefulWidget {
-  bool conversas;
-  ConversaGrupo({ Key? key, required this.conversas}) : super(key: key);
-
-  @override
-  _ConversaGrupoState createState() => _ConversaGrupoState();
-}
-
-class _ConversaGrupoState extends State<ConversaGrupo> {
-  @override
-  Widget build(BuildContext context) {
-    if (widget.conversas)
-      return ListaConversas();
-    else return ListaGrupos();
-  }
-}*/
