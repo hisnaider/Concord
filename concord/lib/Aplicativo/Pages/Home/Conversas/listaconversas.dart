@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:concord/Services/contatos.dart';
+import 'package:concord/Services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'Components/Contatos.dart';
 
@@ -11,6 +15,8 @@ class ListaConversas extends StatefulWidget {
 }
 
 class _ListaConversasState extends State<ListaConversas> {
+
+
   List <List <String>> lista = [
     ["https://tm.ibxk.com.br/2018/08/10/10220125688008.jpg","Doom Guy", "MATAR, MATAR, MATAR DEMONIOS!!!"],
     ["https://sm.ign.com/t/ign_br/news/9/9-things-y/9-things-you-probably-didnt-know-about-master-chie_zmy1.1200.jpg","Master Chief","Cortana é chata pra caralho"],
@@ -28,8 +34,8 @@ class _ListaConversasState extends State<ListaConversas> {
     return Column(
       children: [
         GestureDetector(
-            child: Contato(foto: i[0], nome: i[1],mensagem: i[2]
-            ),
+            /*child: Contato(foto: i[0], nome: i[1],mensagem: ""
+            ),*/
           )
         ,
         Divider(
@@ -41,20 +47,25 @@ class _ListaConversasState extends State<ListaConversas> {
     );          
   }
 
+ 
+  
+
   @override
   Widget build(BuildContext context) {
+
     return Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
-              child: Visibility(
-                child: ListView.builder(
-                  itemCount: lista.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return teste(lista[index]);
-                  },
+              child: Padding(
+                padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
+                child: Visibility(
+                  child: Container(),
+                  /*child: ListView.builder(
+                    itemCount: lista.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return teste(lista[index]);
+                    },
+            ),*/
           ),
         ),
-      ),
-    );
+      );
   }
 }

@@ -47,7 +47,7 @@ class Autenticador{
       UserCredential resultado = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
       User? usuario = resultado.user;
 
-      await DatabaseService(uid: usuario!.uid).atualizarDadosUser(nome, birth, "");
+      await DatabaseService(uid: usuario!.uid).atualizarDadosUser(nome, birth, "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png");
 
       return  _usuariofirebase(usuario);
       

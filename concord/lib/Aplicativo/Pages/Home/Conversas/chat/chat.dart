@@ -17,15 +17,18 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            CircleAvatar(backgroundImage: NetworkImage(widget.foto)),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(widget.nome),
-            )
+        title: Container(
 
-          ],
+          child: Row(
+            children: [
+              CircleAvatar(backgroundImage: NetworkImage(widget.foto)),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(widget.nome,style: TextStyle(fontSize: 15),),
+              )
+
+            ],
+          ),
         ),
       ),
       body: Column(

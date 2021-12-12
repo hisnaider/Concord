@@ -2,10 +2,13 @@
 ///import 'package:concord/Aplicativo/Home/Components/HomeController.dart';
 import 'package:concord/Aplicativo/Pages/Home/Grupos/listagrupos.dart';
 import 'package:concord/Services/auth.dart';
+import 'package:concord/Services/contatos.dart';
+import 'package:concord/Services/database.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'Components/Button.dart';
-import 'Conversas/listaconversas.dart';
+import 'contatoslista.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
@@ -28,53 +31,36 @@ class _HomeState extends State<Home> {
 
   conversagrupo(a) {
     if (a)
-      return ListaConversas();
+      return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
+                child: Visibility(
+                  child: Container())));
     else return ListaGrupos();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              currentAccountPicture: ClipOval(child: Image.asset("assets/Image/c.jpg")),
-              currentAccountPictureSize: Size.square(80),
-              
-              accountName: Text("Claudette Dançante"),
-              accountEmail: Text("ClaudetteDance@gmail.com")
+    return StreamProvider<List<ContatosUser>?>.value(
+      value: DatabaseService(uid: '').contatos,
+      initialData: [],
+      child: Scaffold(
+        drawer: Drawer(
+          child: GestureDetector(
+            onTap: () async {await _auth.deslogar();
+            },
+            child: Container(
+              width: 100,
+              height: 100,
+              color: Colors.green,
             ),
-            ListTile(
-              leading: Container(height: 50,width: 1,color: Colors.amber,),
-              title: Text("Perfil"),
-              subtitle: Text("Ver e editar perfil"),
-            ),
-            ListTile(
-              leading: Container(height: 50,width: 1,color: Colors.amber,),
-              title: Text("Solicitações"),
-              subtitle: Text("enviar ou ver solicitações"),
-            ),
-            ListTile(
-              leading: Container(height: 50,width: 1,color: Colors.amber,),
-              title: Text("Configurações"),
-              subtitle: Text("Configurar App"),
-            ),
-            ListTile(
-              onTap: () async {await _auth.deslogar();},
-              leading: Container(height: 50,width: 1,color: Colors.amber,),
-              title: Text("Logout"),
-              subtitle: Text("Sair da conta"),
-            )
-        ],),
-      ),
-      appBar: AppBar(
-        elevation: 0,
-        actions: [
-          Icon(Icons.search),
-          
+          ),
+        ),
+        appBar: AppBar(
+          elevation: 0,
+          actions: [
+            Icon(Icons.search),
         ],  
-
       ),
       body: Container(
         child: Column(
@@ -105,12 +91,11 @@ class _HomeState extends State<Home> {
                 ///ButtonGrupos(),
               ],
             ),
-            conversagrupo(conversa)
-            
+            ContatosLista()
 
           ],
         ),
       ),
-    );
+    ));
   }
 }
