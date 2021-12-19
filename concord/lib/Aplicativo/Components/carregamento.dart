@@ -1,3 +1,4 @@
+import 'package:concord/Config/cores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -12,12 +13,12 @@ class TelaDeLoading extends StatelessWidget {
         child: Stack(
           children: [
           SpinKitRing(
-            color: Colors.amber,
+            color: cor_primaria,
             size: 150,
             lineWidth: 2,
           ),
           SpinKitPouringHourGlassRefined(
-            color: Colors.amber,
+            color: cor_primaria,
             size:75,
           )
           ]

@@ -1,4 +1,5 @@
 import 'package:concord/Aplicativo/Pages/Home/Conversas/chat/chat.dart';
+import 'package:concord/Config/cores.dart';
 import 'package:concord/Services/contatos.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,7 @@ class _ContatoState extends State<Contato> {
                     ),
                Container(
                       width: 20,
-                      child: Icon(Icons.verified_outlined,size: 20, color: Colors.amber,),)
+                      child: Icon(Icons.verified_outlined,size: 20, color: cor_primaria,),)
             ],
           ),
         ),

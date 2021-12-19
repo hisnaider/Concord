@@ -1,4 +1,5 @@
 import 'package:concord/Aplicativo/Pages/Login/Registrar/registrar.dart';
+import 'package:concord/Config/cores.dart';
 import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {
@@ -12,7 +13,7 @@ class LoginButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20),
           width: 150,
           height: 40,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: Colors.amber),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: cor_primaria),
             child: Center(
               child: Text("Entrar",style: TextStyle(fontSize: 22,color: Colors.black),
             )
@@ -33,7 +34,7 @@ class RegistrarButton extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20),
           width: 150,
           height: 40,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: Colors.amber),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: cor_primaria),
             child: Center(
               child: Text("Registrar",style: TextStyle(fontSize: 22,color: Colors.black),
             )

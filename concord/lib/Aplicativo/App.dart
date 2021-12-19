@@ -1,3 +1,4 @@
+import 'package:concord/Config/cores.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/myuser.dart';
 ///import 'package:firebase_auth/firebase_auth.dart';
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
         title: "nome",
         theme: ThemeData(
 
-          primaryColor: Colors.amber,
+          primaryColor: cor_primaria,
           brightness: Brightness.dark
         ),
         home: Wrapper()

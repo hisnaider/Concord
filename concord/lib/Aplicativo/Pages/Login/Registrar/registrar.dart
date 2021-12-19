@@ -2,6 +2,7 @@ import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Aplicativo/Pages/Login/Registrar/Components/button.dart';
 import 'package:concord/Aplicativo/Pages/Login/login.dart';
+import 'package:concord/Config/cores.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -34,7 +35,7 @@ class _RegistrarState extends State<Registrar> {
             flex: 1,
             child: Stack(
               children: [
-                Container(color: Colors.amber,)
+                Container(color: cor_primaria,)
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:concord/Config/cores.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -45,7 +46,7 @@ class _ChatState extends State<Chat> {
                       child: Container(
                         height: 50,
                         width: 250,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: cor_primaria,),
                       ),
                     ),
                   ),
@@ -78,7 +79,7 @@ class _ChatState extends State<Chat> {
                       child: Container(
                         height: 100,
                         width: 300,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: cor_primaria,),
                       ),
                     ),
                   ),
@@ -100,7 +101,7 @@ class _ChatState extends State<Chat> {
                       child: Container(
                         height: 50,
                         width: 100,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: cor_primaria,),
                       ),
                     ),
                   ),
@@ -111,7 +112,7 @@ class _ChatState extends State<Chat> {
                       child: Container(
                         height: 100,
                         width: 300,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: cor_primaria,),
                       ),
                     ),
                   ),
@@ -122,7 +123,7 @@ class _ChatState extends State<Chat> {
                       child: Container(
                         height: 100,
                         width: 300,
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.amber,),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: cor_primaria,),
                       ),
                     ),
                   ),
@@ -136,7 +137,7 @@ class _ChatState extends State<Chat> {
           Container(
             height: 45+(20*linhas),
             width:double.infinity,
-            color: Colors.amber,
+            color: cor_primaria,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 0),
               child: Row(

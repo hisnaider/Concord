@@ -1,5 +1,6 @@
 import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
+import 'package:concord/Config/cores.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
 
@@ -42,7 +43,7 @@ class _LoginState extends State<Login> {
             flex: 3,
             child: Stack(
               children: [
-                Container(color: Colors.amber,),
+                Container(color: cor_primaria,),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -123,7 +124,7 @@ class _LoginState extends State<Login> {
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           width: 150,
                           height: 40,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: Colors.amber),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: cor_primaria),
                             child: Center(
                               child: Text("Entrar",style: TextStyle(fontSize: 22,color: Colors.black),
                               )

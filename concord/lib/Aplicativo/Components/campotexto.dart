@@ -1,3 +1,4 @@
+import 'package:concord/Config/cores.dart';
 import 'package:flutter/material.dart';
 
 
@@ -16,7 +17,7 @@ const campotextodec = InputDecoration(
 Widget icone(icon) => Padding(padding: 
               EdgeInsets.zero,child: Icon(
                 icon,
-                color: Colors.amber,
+                color: cor_primaria,
                 size: 30,
               )
             );

@@ -26,6 +26,7 @@ class _ContatosListaState extends State<ContatosLista> {
       child: Padding(
         padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
         child: ListView.builder(
+          
           itemCount: contatos.length,
           itemBuilder: (BuildContext context, int index) {
             return Contato(contatos: contatos[index]);
