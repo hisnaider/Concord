@@ -1,27 +1,18 @@
 
 ///import 'package:concord/Aplicativo/Home/Components/HomeController.dart';
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+///import 'dart:io';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Aplicativo/Pages/Home/Components/barra_lateral.dart';
-import 'package:concord/Aplicativo/Pages/Home/Conversas/listaconversas.dart';
 import 'package:concord/Aplicativo/Pages/Home/addAmigo/addAmigo.dart';
 import 'package:concord/Config/geral.dart';
-import 'package:concord/Services/addamigo.dart';
-import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/contatos.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/imagens.dart';
 import 'package:concord/Services/myuser.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
-import 'Components/Button.dart';
 import 'contatoslista.dart';
 
 // ignore: must_be_immutable
@@ -36,7 +27,7 @@ class _HomeState extends State<Home> {
 
 
   DatabaseImagens img = DatabaseImagens();
-  final Autenticador _auth = Autenticador(); 
+  //final Autenticador _auth = Autenticador(); 
 
   bool conversa = true;
   bool color_picker = false;
@@ -53,7 +44,7 @@ class _HomeState extends State<Home> {
 
 
     return StreamBuilder<UserData>(
-      stream: DatabaseService(uid: user!.id).userData,
+      stream: DatabaseService(uid: user.id).userData,
       builder: (context, snapshot) {
         if(snapshot.hasData){
           UserData? userdata = snapshot.data;
