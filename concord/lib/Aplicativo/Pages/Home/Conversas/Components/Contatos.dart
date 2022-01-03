@@ -1,10 +1,9 @@
 import 'package:concord/Aplicativo/Pages/Home/Conversas/chat/chat.dart';
-import 'package:concord/Config/cores.dart';
+import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/contatos.dart';
 import 'package:flutter/material.dart';
 
 
-// ignore: must_be_immutable
 class Contato extends StatefulWidget {
 
   final ContatosUser contatos;
@@ -33,10 +32,11 @@ class _ContatoState extends State<Contato> {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
+            
             children: [
               CircleAvatar(
                 radius: 35,
-                backgroundImage: NetworkImage(widget.contatos.foto),
+                backgroundImage: NetworkImage(widget.contatos.foto,),
               ),
               Container(
                 width: 125,

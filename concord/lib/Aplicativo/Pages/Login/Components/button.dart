@@ -1,5 +1,5 @@
 import 'package:concord/Aplicativo/Pages/Login/Registrar/registrar.dart';
-import 'package:concord/Config/cores.dart';
+import 'package:concord/Config/geral.dart';
 import 'package:flutter/material.dart';
 
 class LoginButton extends StatelessWidget {

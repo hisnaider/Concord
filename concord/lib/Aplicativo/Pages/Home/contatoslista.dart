@@ -16,12 +16,6 @@ class _ContatosListaState extends State<ContatosLista> {
   Widget build(BuildContext context) {
     
     final contatos = Provider.of<List<ContatosUser>>(context);
-    contatos.forEach((element) {
-      print(element.nome);
-      print(element.birth);
-      print(element.foto);
-    });
-
     return Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left:10,right: 10 , top: 20),

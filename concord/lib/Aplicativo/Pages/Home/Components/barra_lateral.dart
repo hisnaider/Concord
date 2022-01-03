@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:concord/Config/cores.dart';
+import 'package:concord/Aplicativo/Pages/Home/Home.dart';
+import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
+import 'package:concord/Services/database.dart';
 import 'package:concord/Services/myuser.dart';
 import 'package:concord/Services/imagens.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -13,8 +16,9 @@ import 'package:image_picker/image_picker.dart';
 class BarraLateral extends StatefulWidget {
 
   UserData? usuario;
+  DatabaseService? database;
 
-  BarraLateral({ required this.usuario });
+  BarraLateral({ required this.usuario, required this.database});
 
   @override
   _BarraLateralState createState() => _BarraLateralState();
@@ -27,37 +31,46 @@ class _BarraLateralState extends State<BarraLateral> {
   bool edit_tema = false;
   bool sobre_app = false;
 
+  String? _nomeatual;
+  String? _birthatual;
+  String? _fotoatual;
+
   DatabaseImagens img = DatabaseImagens();
   Autenticador auth = Autenticador();
 
+  Home home = Home();
+
   File? _fotos;
   XFile? foto;
-
-  Future pegarimagem(bool galeria) async {
+  
+  Future pegarimagem(bool galeria, String endereco) async {
+    Reference ref = FirebaseStorage.instance.ref().child(endereco);
     ImagePicker picker = ImagePicker();
     XFile? pickedFile;
     if(galeria)pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 25);
     else pickedFile = await picker.pickImage(source: ImageSource.camera);
-    setState(() {
-      if (pickedFile != null) {
-        _fotos = File(pickedFile.path);
-        img.salvarimagem(_fotos!, "Usuarios/${widget.usuario?.id}/perfil");
+    if (pickedFile != null) {
+        await img.salvarimagem(File(pickedFile.path), endereco);
+        String url = await ref.getDownloadURL();
+        return url.toString();
       } else {
         print("nada");
+        
       }
-      
-      }
-    );
+    return _fotoatual;
   }
-  
+
   @override
   Widget build(BuildContext context) {
+    _nomeatual = widget.usuario?.nome;
+    _birthatual = widget.usuario?.birth;
+    _fotoatual = widget.usuario?.foto;
     return BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
 
       child: Drawer(
         
-            child: ListView(
+            child: Column(
               children: [
                 DrawerHeader(
                   padding: EdgeInsets.zero,
@@ -68,15 +81,27 @@ class _BarraLateralState extends State<BarraLateral> {
                         decoration: BoxDecoration(
                           image: DecorationImage(
                             //image: FileImage(_fotos),
-                            image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"),
+                            image: NetworkImage(_fotoatual!),
                             fit: BoxFit.cover,
                             colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
                           )   
                         ),
                       ),
                       IconButton(
-                        onPressed: (){
-                          pegarimagem(true);
+                        onPressed: () async {
+                          String asd = await pegarimagem(true, "Usuarios/${widget.usuario?.id}/perfil/foto_perfil");
+                          setState(() {
+                            _fotoatual = asd;
+                            
+                          });
+                          await widget.database?.atualizarDadosUser(
+                              _nomeatual!, 
+                              _birthatual!, 
+                              _fotoatual!
+                            );
+                          
+                          
+                          
                         }, 
                         icon: Icon(
                           Icons.camera_alt_outlined,
@@ -84,15 +109,6 @@ class _BarraLateralState extends State<BarraLateral> {
                         )
                       ),
                       
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          color: Colors.black,
-                          child: Image.network("${FirebaseStorage.instance.ref().child("Sistema/Sem_foto").getDownloadURL()}")
-                        ),
-                      ),
                       Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -101,10 +117,10 @@ class _BarraLateralState extends State<BarraLateral> {
                               padding: const EdgeInsets.only(bottom: 7),
                               child: CircleAvatar(
                                 radius: 50,
-                                backgroundImage: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"),
+                                backgroundImage: NetworkImage(_fotoatual!),
                                 ),
                               ),
-                            Text("${widget.usuario!.nome}",
+                            Text(_nomeatual!,
                             style: TextStyle(
                               fontSize: 20,
                               color: cor_texto,

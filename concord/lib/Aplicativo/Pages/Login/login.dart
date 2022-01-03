@@ -1,6 +1,6 @@
 import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
-import 'package:concord/Config/cores.dart';
+import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
 

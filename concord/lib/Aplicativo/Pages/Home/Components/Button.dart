@@ -1,4 +1,4 @@
-import 'package:concord/Config/cores.dart';
+import 'package:concord/Config/geral.dart';
 import 'package:flutter/material.dart';
 
 ButtonStyle button(conversa) => TextButton.styleFrom(

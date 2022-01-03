@@ -1,4 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:concord/Aplicativo/Pages/Home/addAmigo/addAmigo.dart';
+import 'package:concord/Services/addamigo.dart';
+import 'package:concord/Services/amigos.dart';
 import 'package:concord/Services/contatos.dart';
 import 'package:concord/Services/myuser.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -19,12 +22,16 @@ class DatabaseService {
     );
   }
 
+  
+
   List<ContatosUser> _listaContatosUser(QuerySnapshot snapshot){
     return snapshot.docs.map((e) {
       return ContatosUser(
         foto: e.get("foto") ?? "",
         nome: e.get("nome") ?? "",
-        birth: e.get("birth") ?? "");
+        birth: e.get("birth") ?? "",
+        id: e.id,
+        );
     }).toList();
   }
 
@@ -38,11 +45,41 @@ class DatabaseService {
     );
   }
 
+  List<AmigosUser> _listaAmigosUser(QuerySnapshot snapshot){
+    return snapshot.docs.map((e) {
+      return AmigosUser(
+        foto: e.get("foto") ?? "",
+        nome: e.get("nome") ?? "",
+        birth: e.get("birth") ?? "",
+        amigosdesde: "${DateTime.now()}",
+        );
+    }).toList();
+  }
+
+  List<AddUser> _listaAddUser(QuerySnapshot snapshot){
+    return snapshot.docs.map((e) {
+      return AddUser(
+        foto: e.get("foto") ?? "",
+        nome: e.get("nome") ?? "",
+        id: e.id
+        );
+    }).toList();
+  }
+
+
+
   Stream<List<ContatosUser>> get contatos{
     return usuariosCollection.snapshots().map(_listaContatosUser);
   }
 
   Stream<UserData> get userData{
     return usuariosCollection.doc(uid).snapshots().map(_userDataSnapshot);
+  }
+  Stream<List<AddUser>> addUser(String nome){
+    return usuariosCollection.where("nome", isGreaterThanOrEqualTo: nome).where("nome", isLessThanOrEqualTo: nome+"z").snapshots().map(_listaAddUser);
+  }
+
+  Stream<List<AmigosUser>> get amigosUser{
+    return usuariosCollection.doc(uid).collection("Amigos").snapshots().map(_listaAmigosUser);
   }
 }

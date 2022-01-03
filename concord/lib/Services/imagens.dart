@@ -10,4 +10,13 @@ class DatabaseImagens{
     Reference ref = FirebaseStorage.instance.ref().child(endereco);
     UploadTask uploadTask = ref.putFile(_imagem);
   }
+
+  Future<String> pegarurl (String endereco) async {
+    Reference ref = FirebaseStorage.instance.ref().child(endereco);
+    String url = await ref.getDownloadURL();
+    return url;
+  
+  }
+
+  
 }

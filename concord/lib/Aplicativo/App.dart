@@ -1,4 +1,4 @@
-import 'package:concord/Config/cores.dart';
+import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/myuser.dart';
 ///import 'package:firebase_auth/firebase_auth.dart';
