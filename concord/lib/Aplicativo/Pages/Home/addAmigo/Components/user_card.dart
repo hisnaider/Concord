@@ -9,9 +9,10 @@ import 'package:flutter/material.dart';
 
 class UserCard extends StatefulWidget {
   final AddUser contato;
-  final bool amigos;
-  bool addenviado;
-  UserCard({required this.contato, required this.addenviado, required this.amigos});
+  bool amigos = false;
+  bool convite = false;
+  DocumentReference doc;
+  UserCard({required this.contato, required this.doc});
 
   @override
   State<UserCard> createState() => _UserCardState();
@@ -25,9 +26,29 @@ class _UserCardState extends State<UserCard> {
   Icon? icone;
   String? texto = "";
 
-  check(){
+  check() async {
+    widget.doc.get().then((value) {
+      setState(() {
+        widget.convite = value.exists;
+        widget.amigos = value.get("amigos");
+      });
+    });
+    if(widget.convite) {
+      if (widget.amigos) {
+          icone = Icon(Icons.person);
+          texto = "Amigos";
+        }
+        else {
+          icone = Icon(Icons.done);
+          texto = "Enviado";
+        }
+    }
+    else{
+      icone = Icon(Icons.send);
+      texto = "Enviar";
+    }
     setState(() {
-      if (widget.addenviado){
+      /*if (widget.addenviado){
         if (widget.amigos) {
           icone = Icon(Icons.person);
           texto = "Amigos";
@@ -40,7 +61,7 @@ class _UserCardState extends State<UserCard> {
       else {
         icone = Icon(Icons.send);
         texto = "Enviar";
-      }
+      }*/
     });
     
   }
@@ -69,11 +90,9 @@ class _UserCardState extends State<UserCard> {
               ),
               Text(texto!),
               IconButton(
-                onPressed: (){                  
-                  setState(() {
-                    widget.addenviado = true;
-                  });
+                onPressed: () async {                  
                   solic.enviarSolicitacao(widget.contato.id);
+                  check();
                 },
                 icon: icone!)
             ],

@@ -3,14 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Services/addamigo.dart';
-import 'package:concord/Services/contatos.dart';
 import 'package:concord/Services/database.dart';
-import 'package:provider/provider.dart';
 import 'package:concord/Aplicativo/Pages/Home/addAmigo/Components/user_card.dart';
 import 'package:flutter/material.dart';
 
 class AddAmigos extends StatefulWidget {
-  String userid;
+  final String userid;
   AddAmigos({required this.userid});
 
   @override
@@ -20,28 +18,13 @@ class AddAmigos extends StatefulWidget {
 class _AddAmigosState extends State<AddAmigos> {
 
   String nome = " ";
-
-  Future enviado(DocumentReference user) async{
-    bool res = false;
-    user.get().then((value) {
-      if (value.exists) res = true;
-      else res = false;
-      } 
-    );
-    return res;
-  }
-  Future<bool> amigos(DocumentReference user) async{
-    bool res = false;
-    user.get().then((value) {
-      if (value.get("amigos") == true) res = true;
-      else res = false;
-      } 
-    );
-    return res;
-  }
+  
+  
 
   @override
+
   Widget build(BuildContext context) {    
+    
     return StreamBuilder<List<AddUser>>(
       stream: DatabaseService(uid: "").addUser(nome),
       builder: (context, snapshot) {
@@ -70,7 +53,7 @@ class _AddAmigosState extends State<AddAmigos> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 20, 0, 0),
                   child: Text(
-                    "Foi encontra ${contatos?.length} usuarios",
+                    "Foi encontra ${contatos!.length-1} usuarios",
                     style: TextStyle(fontSize: 20)
                   )
                 ),
@@ -81,24 +64,13 @@ class _AddAmigosState extends State<AddAmigos> {
                     padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
                     child: ListView.builder(
                     
-                      itemCount: contatos?.length,
+                      itemCount: contatos.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var user = FirebaseFirestore.instance.collection("Usuario").doc(contatos![index].id).collection("Amigos").doc(widget.userid);
-                        var convite = false;
-                        var amizade = false;
-
-                        user.get().then((value) {
-                          if (value.exists) convite = true;
-                          else convite = false;
-                          } 
-                        );
-                        user.get().then((value) {
-                          if (value.get("amigos") == true) amizade = true;
-                          else amizade = false;
-                          } 
-                        );
-                        
-                        return UserCard(contato: contatos[index], amigos: amizade, addenviado: convite,);
+                        if (contatos[index].id != widget.userid){
+                          var user = FirebaseFirestore.instance.collection("Usuarios").doc(contatos[index].id).collection("Amigos").doc(widget.userid);
+                        return UserCard(contato: contatos[index], doc: user);
+                        }
+                        else return SizedBox.shrink();
                       },
                     ),
                   )
