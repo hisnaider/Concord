@@ -1,7 +1,8 @@
-import 'package:concord/Services/contatos.dart';
+import 'package:concord/Aplicativo/Components/carregamento.dart';
+import 'package:concord/Config/geral.dart';
+import 'package:concord/Services/database.dart';
+import 'package:concord/Services/models/contatos.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import 'Conversas/Components/Contatos.dart';
 
 class ContatosLista extends StatefulWidget {
@@ -14,19 +15,25 @@ class ContatosLista extends StatefulWidget {
 class _ContatosListaState extends State<ContatosLista> {
   @override
   Widget build(BuildContext context) {
-    
-    final contatos = Provider.of<List<ContatosUser>>(context);
-    return Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
-        child: ListView.builder(
-          
-          itemCount: contatos.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Contato(contatos: contatos[index]);
-          },
-        ),
-      )
+    return StreamBuilder<List<ContatosUser>?>(
+      stream: DatabaseService(uid: uid!).contatos,
+      builder: (context, snapshot){
+        if (snapshot.hasData) {
+          final contatos = snapshot.data?.toList();
+          return Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(left:10,right: 10 , top: 20),
+              child: ListView.builder(       
+                itemCount: contatos!.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Contato(contatos: contatos[index]);
+                },
+              ),
+            )
+          );
+        }
+        else return TelaDeLoading();
+      }
     );
   }
 }

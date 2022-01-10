@@ -1,6 +1,6 @@
 import 'package:concord/Aplicativo/Pages/Home/Home.dart';
 import 'package:concord/Aplicativo/Pages/Login/login.dart';
-import 'package:concord/Services/myuser.dart';
+import 'package:concord/Services/models/myuser.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 

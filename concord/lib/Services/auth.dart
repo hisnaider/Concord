@@ -1,5 +1,5 @@
 import 'package:concord/Services/database.dart';
-import 'package:concord/Services/myuser.dart';
+import 'package:concord/Services/models/myuser.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 

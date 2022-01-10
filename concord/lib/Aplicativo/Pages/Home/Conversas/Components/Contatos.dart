@@ -1,6 +1,6 @@
 import 'package:concord/Aplicativo/Pages/Home/Conversas/chat/chat.dart';
 import 'package:concord/Config/geral.dart';
-import 'package:concord/Services/contatos.dart';
+import 'package:concord/Services/models/contatos.dart';
 import 'package:flutter/material.dart';
 
 

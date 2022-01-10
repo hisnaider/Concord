@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:concord/Aplicativo/Pages/Home/addAmigo/addAmigo.dart';
-import 'package:concord/Services/addamigo.dart';
-import 'package:concord/Services/amigos.dart';
-import 'package:concord/Services/contatos.dart';
-import 'package:concord/Services/myuser.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:concord/Services/models/addamigo.dart';
+import 'package:concord/Services/models/amigos.dart';
+import 'package:concord/Services/models/contatos.dart';
+import 'package:concord/Services/models/myuser.dart';
+
+import 'models/solicamigo.dart';
 
 class DatabaseService {
   final String uid;
@@ -45,16 +45,6 @@ class DatabaseService {
     );
   }
 
-  List<AmigosUser> _listaAmigosUser(QuerySnapshot snapshot){
-    return snapshot.docs.map((e) {
-      return AmigosUser(
-        foto: e.get("foto") ?? "",
-        nome: e.get("nome") ?? "",
-        birth: e.get("birth") ?? "",
-        amigosdesde: "${DateTime.now()}",
-        );
-    }).toList();
-  }
 
   List<AddUser> _listaAddUser(QuerySnapshot snapshot){
     return snapshot.docs.map((e) {
@@ -66,10 +56,36 @@ class DatabaseService {
     }).toList();
   }
 
+  List<SolicUser> _listaSolicUser(QuerySnapshot snapshot){
+    return snapshot.docs.map((e) {
+      return SolicUser(
+        foto: e.get("foto") ?? "",
+        nome: e.get("nome") ?? "",
+        id: e.id
+        );
+    }).toList();
+  }
+
+  List<AmigosUser> _amigos(QuerySnapshot snapshot){
+    return snapshot.docs.map((e) {
+      return AmigosUser(
+        foto: e.get("foto") ?? "",
+        nome: e.get("nome") ?? "",
+        id: e.id,
+        amigosdesde: e.get("amigosdesde") ?? DateTime.now(),
+        apelido: e.get("apelido") ?? "",
+        );
+    }).toList();
+  }
+
 
 
   Stream<List<ContatosUser>> get contatos{
     return usuariosCollection.snapshots().map(_listaContatosUser);
+  }
+
+  Stream<List<AmigosUser>> get amigos{
+    return usuariosCollection.doc(uid).collection("Amigos").where("amigos", isEqualTo: true).snapshots().map(_amigos);
   }
 
   Stream<UserData> get userData{
@@ -78,8 +94,8 @@ class DatabaseService {
   Stream<List<AddUser>> addUser(String nome){
     return usuariosCollection.where("nome", isGreaterThanOrEqualTo: nome).where("nome", isLessThanOrEqualTo: nome+"z").snapshots().map(_listaAddUser);
   }
-
-  Stream<List<AmigosUser>> get amigosUser{
-    return usuariosCollection.doc(uid).collection("Amigos").snapshots().map(_listaAmigosUser);
+  Stream<List<SolicUser>> solicUser(){
+    return usuariosCollection.doc(uid).collection("Amigos").where("amigos", isEqualTo: false).snapshots().map(_listaSolicUser);
   }
+
 }

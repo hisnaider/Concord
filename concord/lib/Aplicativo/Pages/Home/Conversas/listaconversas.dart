@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:concord/Services/contatos.dart';
+import 'package:concord/Services/models/contatos.dart';
 import 'package:concord/Services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

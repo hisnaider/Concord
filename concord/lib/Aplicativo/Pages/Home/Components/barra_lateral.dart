@@ -5,7 +5,7 @@ import 'package:concord/Aplicativo/Pages/Home/Home.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/database.dart';
-import 'package:concord/Services/myuser.dart';
+import 'package:concord/Services/models/myuser.dart';
 import 'package:concord/Services/imagens.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';

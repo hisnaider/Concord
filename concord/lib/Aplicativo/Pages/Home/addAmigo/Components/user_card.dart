@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Config/geral.dart';
-import 'package:concord/Services/addamigo.dart';
-import 'package:concord/Services/contatos.dart';
+import 'package:concord/Services/models/addamigo.dart';
+import 'package:concord/Services/models/contatos.dart';
 import 'package:concord/Services/solicitacoes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +25,7 @@ class _UserCardState extends State<UserCard> {
 
   Icon? icone;
   String? texto = "";
+  bool completo = false;
 
   check() async {
     widget.doc.get().then((value) {
@@ -33,6 +34,7 @@ class _UserCardState extends State<UserCard> {
         widget.amigos = value.get("amigos");
       });
     });
+    
     if(widget.convite) {
       if (widget.amigos) {
           icone = Icon(Icons.person);
@@ -47,26 +49,11 @@ class _UserCardState extends State<UserCard> {
       icone = Icon(Icons.send);
       texto = "Enviar";
     }
-    setState(() {
-      /*if (widget.addenviado){
-        if (widget.amigos) {
-          icone = Icon(Icons.person);
-          texto = "Amigos";
-        }
-        else {
-          icone = Icon(Icons.done);
-          texto = "Enviado";
-        }
-      }
-      else {
-        icone = Icon(Icons.send);
-        texto = "Enviar";
-      }*/
-    });
-    
+    return Container();
   }
 
   @override
+  
   Widget build(BuildContext context) {
     check();
     return Card(
@@ -91,7 +78,7 @@ class _UserCardState extends State<UserCard> {
               Text(texto!),
               IconButton(
                 onPressed: () async {                  
-                  solic.enviarSolicitacao(widget.contato.id);
+                  solic.enviarSolic(widget.contato.id);
                   check();
                 },
                 icon: icone!)
