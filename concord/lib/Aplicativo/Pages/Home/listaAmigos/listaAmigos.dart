@@ -17,7 +17,7 @@ class ListaAmigos extends StatefulWidget {
 class _ListaAmigosState extends State<ListaAmigos> {
   Widget a(){
     return StreamBuilder<List<AmigosUser>>(
-      stream: DatabaseService(uid: uid!).amigos,
+      stream: DatabaseService(uid: widget.userid).amigos(),
       builder: (context, snapshot){
         if (snapshot.hasData) {
           final contatos = snapshot.data?.toList();

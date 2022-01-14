@@ -1,11 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 class AmigosUser{
-  final String nome;
-  final String foto;
-  final String id;
-  final String amigosdesde;
+  final Timestamp amigosDesde;
   final String apelido;
+  final String id;
+  final bool melhoresAmigos;
+  final String relacao;
 
-  AmigosUser({required this.nome, required this.foto, required this.id, required this.amigosdesde, required this.apelido});
+  AmigosUser({required this.amigosDesde, required this.apelido, required this.id, required this.melhoresAmigos , required this.relacao});
 }

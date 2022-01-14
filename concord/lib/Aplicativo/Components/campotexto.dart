@@ -11,13 +11,13 @@ const campotextodec = InputDecoration(
             )
           ),
           filled: true,
-          fillColor: Color.fromRGBO(97, 97, 97,1),
+          fillColor: Color.fromRGBO(40, 40, 40,1),
 );
 
 Widget icone(icon) => Padding(padding: 
               EdgeInsets.zero,child: Icon(
                 icon,
                 color: cor_primaria,
-                size: 30,
+                size: 25,
               )
             );

@@ -164,7 +164,7 @@ class _LoginState extends State<Login> {
                     ),
                     ///Container(height: 2,width: 500,color: Colors.grey[800],),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Center(child: Text("Caso não tenha uma conta, crie uma, é de graça!!!",style: TextStyle(fontSize: 17),textAlign: TextAlign.center,)),
                     ),
                     RegistrarButton(),

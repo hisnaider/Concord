@@ -1,12 +1,14 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Aplicativo/Pages/Home/Home.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/models/myuser.dart';
 import 'package:concord/Services/imagens.dart';
+import 'package:concord/Services/solicitacoes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,8 @@ class BarraLateral extends StatefulWidget {
 }
 
 class _BarraLateralState extends State<BarraLateral> {
+
+  Solicitacoes teste = Solicitacoes();
 
   bool edit_perfil = false;
   bool edit_privacidade = false;
@@ -90,6 +94,7 @@ class _BarraLateralState extends State<BarraLateral> {
                       IconButton(
                         onPressed: () async {
                           String asd = await pegarimagem(true, "Usuarios/${widget.usuario?.id}/perfil/foto_perfil");
+
                           setState(() {
                             _fotoatual = asd;
                             

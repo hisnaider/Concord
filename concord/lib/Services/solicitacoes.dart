@@ -11,24 +11,45 @@ class Solicitacoes{
   
 
   Future enviarSolic(String id) async {
-    return await usuariosCollection.doc(id).collection("Amigos").doc(uid).set({
-      "id": uid,
-      "amigos": false,
-      "nome": nome_user,
-      "foto": foto_user,
+    return await usuariosCollection.doc(id).update({
+      "Solicitações": FieldValue.arrayUnion([uid])
       }
     );
   }
-  Future aceitarsolic(String id) async {
-    DateTime dia = DateTime.now();
-    return await usuariosCollection.doc(id).collection("Amigos").doc(uid).set({
-      "id": uid,
-      "amigos": true,
-      "nome": nome_user,
-      "foto": foto_user,
-      "amigosdesde": DateTime(dia.year,dia.month,dia.day),
-      "apelido": nome_user
+
+  Future rejeitarsolic(String id) async {
+    return await usuariosCollection.doc(uid).update({
+      "Solicitações": FieldValue.arrayRemove([id])
       }
     );
+  }
+
+  Future aceitarsolic(String id) async {
+    return await usuariosCollection.doc(id).get().then((e) async {
+      await usuariosCollection.doc(id).update({
+        "Solicitações": FieldValue.arrayRemove([uid])
+        }
+      );
+      await usuariosCollection.doc(uid).update({
+        "Solicitações": FieldValue.arrayRemove([id])
+        }
+      );
+      await usuariosCollection.doc(id).collection("Amigos").doc(uid).set({
+        "id": uid,
+        "apelido": nome_user,
+        "melhores-amigos": false,
+        "relação": "Amigos",
+        "amigos-desde": DateTime.now()
+        }
+      );
+      await usuariosCollection.doc(uid).collection("Amigos").doc(id).set({
+        "id": e.id,
+        "apelido": e.get("nome"),
+        "melhores-amigos": false,
+        "relação": "Amigos",
+        "amigos-desde": DateTime.now()
+        }
+      );
+    });
   }
 } 

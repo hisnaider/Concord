@@ -15,7 +15,7 @@ class ContatosLista extends StatefulWidget {
 class _ContatosListaState extends State<ContatosLista> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<ContatosUser>?>(
+    return StreamBuilder<List<ContatoUser>?>(
       stream: DatabaseService(uid: uid!).contatos,
       builder: (context, snapshot){
         if (snapshot.hasData) {

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class Contato extends StatefulWidget {
 
-  final ContatosUser contatos;
+  final ContatoUser contatos;
   Contato({required this.contatos});
 
   /*String foto;
