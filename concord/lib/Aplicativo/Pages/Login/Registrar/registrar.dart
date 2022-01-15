@@ -1,11 +1,16 @@
+
+import 'dart:io';
+import 'package:intl/intl.dart';
+
 import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
-import 'package:concord/Aplicativo/Pages/Login/Registrar/Components/button.dart';
 import 'package:concord/Aplicativo/Pages/Login/Registrar/Components/senhaSegura.dart';
-import 'package:concord/Aplicativo/Pages/Login/login.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:email_validator/email_validator.dart';
+
 
 
 class Registrar extends StatefulWidget {
@@ -17,20 +22,40 @@ class Registrar extends StatefulWidget {
 
 class _RegistrarState extends State<Registrar> {
 
-  final Autenticador _auth = Autenticador();
   final _formKey = GlobalKey<FormState>();
 
-  String nome="";
-  String email="";
-  String nasc="";
-  String senha="";
-  String confirmsenha="";
+  String nome = "";
+  String email = "";
+  DateTime? nasc = DateTime.now();
+  String senha = "";
+  String confirmsenha = "";
+  String nickname = "";
+  String frase = "";
   bool carregando = false;
+
+  bool foto = false;
 
   int stepAtual = 0;
 
+  File? _fotoatual;
+
+  Future pegarimagem(bool galeria) async {
+    ImagePicker picker = ImagePicker();
+    XFile? pickedFile;
+    if(galeria)pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 25);
+    else pickedFile = await picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) return File(pickedFile.path);
+    return null;
+  }
+
+  
+
   @override
   Widget build(BuildContext context) {
+    ImageProvider<Object> colocarImagem(){
+    if (_fotoatual != null) return FileImage(_fotoatual!);
+    else return NetworkImage(sem_foto);
+  }
     return carregando ? TelaDeLoading() : Material(
       child: Scaffold(
         appBar: AppBar(
@@ -38,38 +63,35 @@ class _RegistrarState extends State<Registrar> {
         ),
         body: Column(
           children: [
-            
             Expanded(
               flex: 4,
               child: Center(
                 child: Container(
-                  child: Form(
-                    key: _formKey,
-                    child: Stepper(
-                      controlsBuilder: (BuildContext context, ControlsDetails details) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: details.onStepCancel, 
-                              child: Text("Voltar", style: TextStyle(fontSize: 25, color: cor_primaria),)
-                            ),
-                            TextButton(
-                              onPressed: details.onStepContinue, 
-                              child: Text("Avançar", style: TextStyle(fontSize: 25, color: cor_primaria))
-                            ),
-                          ],
-                        );
-                      },
-                      type: StepperType.horizontal,
-                      currentStep: stepAtual,
-                      steps: [
-                        Step(
-                          
-                          title: Text("Usuario", style: TextStyle(color: Colors.amber),),
-                          content: Container(
-                            height: MediaQuery.of(context).size.height - 235,
+                  child: Stepper(
+                    controlsBuilder: (BuildContext context, ControlsDetails details) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: stepAtual > 0 ? details.onStepCancel : null, 
+                            child: Text(stepAtual > 0 ? "Voltar" : "", style: TextStyle(fontSize: 25, color: cor_primaria),)
+                          ),
+                          TextButton(
+                            onPressed: details.onStepContinue, 
+                            child: Text(stepAtual < 2 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: cor_primaria))
+                          ),
+                        ],
+                      );
+                    },
+                    type: StepperType.horizontal,
+                    currentStep: stepAtual,
+                    steps: [
+                      Step(
+                        title: Text("Usuario", style: TextStyle(color: Colors.amber),),
+                        content: Form(
+                          child: Container(
+                            height: MediaQuery.of(context).size.height - 255,
                             child: Column(
                               children: [
                                 Align(
@@ -101,150 +123,237 @@ class _RegistrarState extends State<Registrar> {
                                     textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 15),
                                     decoration: campotextodec.copyWith(
-                                          hintText: "Digete seu email*",
+                                          hintText: "Email*",
                                           prefixIcon: icone(Icons.email_outlined)
                                         ),
                                     onChanged: (valor){
-                                      setState(() => nasc = valor);
+                                      setState(() => email = valor);
                                     },
                                   ),
                                 ),
                               
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical:15),
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque sua data de nascimento" : null,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Data de nascimento*",
-                                          prefixIcon: icone(Icons.cake_outlined)
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical:15),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        margin: EdgeInsets.only(right: 10),
+                                        decoration: BoxDecoration(
+                                          color: Color.fromRGBO(40, 40, 40,1),                                        
+                                          border: Border.all(color: Colors.white,width: 0.5),
+                                          borderRadius: BorderRadius.all(Radius.circular(90))
                                         ),
-                                    onChanged: (valor){
-                                      setState(() => nasc = valor);
-                                    },
-                                  ),
-                                ),
-                                
-                              ],
-                            )
-                          )
-                        ),
-                        Step(
-                          title: Text("Senha", style: TextStyle(color: Colors.amber),),
-                          content: Container(
-                            height: MediaQuery.of(context).size.height - 235,
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical:15),
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
-                                    obscureText: true,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Digete sua senha*",
-                                          prefixIcon: icone(Icons.vpn_key_outlined)
+                                        
+                                        child: IconButton(
+                                          onPressed: (){
+                                            showDatePicker(
+                                              context: context,
+                                              initialDate: DateTime.now(),
+                                              firstDate: DateTime(1901),
+                                              lastDate: DateTime.now()
+                                            ).then((valor) {
+                                              setState(() {
+                                                nasc = valor;
+                                              });
+                                            });
+                                          },
+                                          icon: Icon(Icons.calendar_today_outlined,color: Colors.amber,)
                                         ),
-                                    onChanged: (valor){
-                                      setState(() => senha = valor);
-                                    },
-                                  ),
-                                ),
-                                SenhaSegura(senha: senha),
-                                Container(
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
-                                    obscureText: true,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Confirme sua senha*",
-                                          prefixIcon: icone(Icons.vpn_key_outlined)
-                                        ),
-                                    onChanged: (valor){
-                                      setState(() => senha = valor);
-                                    },
-                                  ),
-                                ),
-                              ],
-                            )
-                          )
-                        ),
-                        
-                        Step(
-                          title: Text("Toque final", style: TextStyle(color: Colors.amber),),
-                          content: Container(
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical:15),
-                                  height: 40,
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque sua data de nascimento" : null,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Nickname",
-                                          prefixIcon: icone(Icons.person)
-                                        ),
-                                    onChanged: (valor){
-                                      setState(() => nasc = valor);
-                                    },
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: IconButton(
-                                    onPressed: (){}, 
-                                    icon: Icon(Icons.camera_alt_outlined, size: 40,color: cor_primaria,)
-                                  )
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      //image: FileImage(_fotos),
-                                      image: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"),
-                                      fit: BoxFit.cover,
-                                      colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
-                                    )   
-                                  ),
-                                  child: Center(
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(vertical: 10),
-                                      child: CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage: NetworkImage("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"),
                                       ),
-                                    )
-                                  )
-                                ),
+                                      Column(
+                                        children: [
+                                          Text("Data de nascimento*"),
+                                          Text(DateFormat('dd/MM/yyyy').format(nasc!),style: TextStyle(fontSize: 25),),
+                                        ],
+                                      )
+                                    ]
+                                  ),
+                                ) 
                               ],
                             )
+                          ),
+                        )
+                      ),
+                      Step(
+                        title: Text("Senha", style: TextStyle(color: Colors.amber),),
+                        content: Container(
+                          height: MediaQuery.of(context).size.height - 255,
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical:15),
+                                child: TextFormField(
+                                  validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
+                                  obscureText: true,
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(fontSize: 15),
+                                  decoration: campotextodec.copyWith(
+                                        hintText: "Digite sua senha*",
+                                        prefixIcon: icone(Icons.vpn_key_outlined)
+                                      ),
+                                  onChanged: (valor){
+                                    setState(() => senha = valor);
+                                  },
+                                ),
+                              ),
+                              SenhaSegura(senha: senha),
+                              Container(
+                                child: TextFormField(
+                                  validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
+                                  obscureText: true,
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(fontSize: 15),
+                                  decoration: campotextodec.copyWith(
+                                        hintText: "Confirme sua senha*",
+                                        prefixIcon: icone(Icons.vpn_key_outlined)
+                                      ),
+                                  onChanged: (valor){
+                                    setState(() => senha = valor);
+                                  },
+                                  
+                                ),
+                              ),
+                            ],
                           )
                         )
-                      ],
-                      onStepContinue: (){
-                        if (stepAtual < 2) {
-                          setState(() {
-                            stepAtual += 1;
-                          });
-                        }
-                      },
-                      onStepCancel: (){
-                        if (stepAtual > 0) {
-                          setState(() {
-                            stepAtual -= 1;
-                          });
-                        }
-                      },
-                    ),
+                      ),
+                      
+                      Step(
+                        title: Text("Toque final", style: TextStyle(color: Colors.amber),),
+                        content: Container(
+                          height: MediaQuery.of(context).size.height - 255,
+                          child: Column(
+                            children: [
+                              Stack(
+                                children: [
+                                  Container(
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        //image: FileImage(_fotos),
+                                        image: colocarImagem(),
+                                        fit: BoxFit.cover,
+                                        colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
+                                      )   
+                                    ),
+                                    child: Center(
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 15),
+                                        child: CircleAvatar(
+                                          radius: 60,
+                                          backgroundImage: colocarImagem(),
+                                        ),
+                                      )
+                                    )
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: IconButton(
+                                      onPressed: () async {
+                                        var asd = await pegarimagem(true);
+                                        if (asd != null){
+                                          setState(() {
+                                            _fotoatual = asd;
+                                            foto = true;
+                                        });
+                                        }
+                                      }, 
+                                      icon: Icon(Icons.camera_alt_outlined, size: 40,color: Colors.white,)
+                                    )
+                                  ),
+                                  _fotoatual != null 
+                                    ? Align(
+                                      alignment: Alignment.centerRight,
+                                      child: IconButton(
+                                        onPressed: () async {
+                                          setState(() {
+                                            _fotoatual = null;
+                                          });
+                                        }, 
+                                        icon: Icon(Icons.delete_forever_outlined, size: 40,color: Colors.white,)
+                                      )
+                                    )
+                                    : SizedBox.shrink()
+
+                                ],
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(bottom:0, top: 50),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Digite um nickname caso você não queira usar seu nome real, mas seja criativo, ou deixe em branco pra usar o nome real mesmo e azar, é us guri!", style: TextStyle(fontSize: 15),)),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical:15),
+                                height: 40,
+                                child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(fontSize: 15),
+                                  decoration: campotextodec.copyWith(
+                                        contentPadding: EdgeInsets.only(left: 15),
+                                        hintText: "Nickname",
+                                      ),
+                                  onChanged: (valor){
+                                    setState(() => nickname = valor);
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: 25),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text("Digite uma frase maneira pra todos verem e pensarem 'uau, que frase maneira!!!'", style: TextStyle(fontSize: 15),)),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(vertical:15),
+                                height: 40,
+                                child: TextFormField(
+                                  keyboardType: TextInputType.text,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(fontSize: 15),
+                                  decoration: campotextodec.copyWith(
+                                    contentPadding: EdgeInsets.only(left: 15),
+                                        hintText: "Digite uma frase maneira",
+                                      ),
+                                  onChanged: (valor){
+                                    setState(() => frase = valor);
+                                  },
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 25),
+                                  child: Align(
+                                    alignment: Alignment.bottomLeft,
+                                    child: Text("OBS: Essas informações podem ser colocadas mais tarde")
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        )
+                      )
+                    ],
+                    onStepContinue: (){
+                      if (stepAtual < 2) {
+                        setState(() {
+                          stepAtual += 1;
+                        });
+                      }
+                    },
+                    onStepCancel: (){
+                      if (stepAtual > 0) {
+                        setState(() {
+                          stepAtual -= 1;
+                        });
+                      }
+                    },
+                  ),
                     /*child: Column(
                       children: [
                         Container(
@@ -351,7 +460,6 @@ class _RegistrarState extends State<Registrar> {
                   ),
                 ),
               )
-            )
           ],
         ),
       ),

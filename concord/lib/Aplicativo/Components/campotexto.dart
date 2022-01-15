@@ -8,8 +8,10 @@ const campotextodec = InputDecoration(
             borderSide: BorderSide(),
             borderRadius: BorderRadius.all(
               Radius.circular(40)
-            )
+            ),
+            
           ),
+          
           filled: true,
           fillColor: Color.fromRGBO(40, 40, 40,1),
 );
