@@ -24,7 +24,9 @@ class _RegistrarState extends State<Registrar> {
 
   final _formKey = GlobalKey<FormState>();
 
+
   String nome = "";
+  String sobrenome = "";
   String email = "";
   DateTime? nasc = DateTime.now();
   String senha = "";
@@ -66,53 +68,89 @@ class _RegistrarState extends State<Registrar> {
             Expanded(
               flex: 4,
               child: Center(
-                child: Container(
-                  child: Stepper(
-                    controlsBuilder: (BuildContext context, ControlsDetails details) {
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: stepAtual > 0 ? details.onStepCancel : null, 
-                            child: Text(stepAtual > 0 ? "Voltar" : "", style: TextStyle(fontSize: 25, color: cor_primaria),)
-                          ),
-                          TextButton(
-                            onPressed: details.onStepContinue, 
-                            child: Text(stepAtual < 2 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: cor_primaria))
-                          ),
-                        ],
-                      );
-                    },
-                    type: StepperType.horizontal,
-                    currentStep: stepAtual,
-                    steps: [
-                      Step(
-                        title: Text("Usuario", style: TextStyle(color: Colors.amber),),
-                        content: Form(
-                          child: Container(
+                child: Form(
+                  key: _formKey,
+                  child: Container(
+                    child: Stepper(
+                      controlsBuilder: (BuildContext context, ControlsDetails details) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: stepAtual > 0 ? details.onStepCancel : null, 
+                              child: Text(stepAtual > 0 ? "Voltar" : "", style: TextStyle(fontSize: 25, color: cor_primaria),)
+                            ),
+                            TextButton(
+                              onPressed: details.onStepContinue, 
+                              child: Text(stepAtual < 2 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: cor_primaria))
+                            ),
+                          ],
+                        );
+                      },
+                      type: StepperType.horizontal,
+                      currentStep: stepAtual,
+                      steps: [
+                        Step(
+                          title: Text("Usuario", style: TextStyle(color: Colors.amber),),
+                          content: Container(
                             height: MediaQuery.of(context).size.height - 255,
-                            child: Column(
+                            child: ListView(
                               children: [
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text("Informações basicas", style: TextStyle(fontSize: 20),)
                                 ),
-                                
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical:15),
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque seu nome" : null,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Nome Completo*",
-                                          prefixIcon: icone(Icons.person_outline)
+                                Row(
+                                  children: [
+                                    
+                                  ],
+                                ),
+
+                                Padding(
+                                  padding: EdgeInsets.symmetric(vertical:15),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          margin: EdgeInsets.only(right: 5),
+                                          child: TextFormField(
+                                            validator: (val) => val!.isEmpty ? "Coloque seu primeiro nome" : null,
+                                            keyboardType: TextInputType.text,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(fontSize: 15),
+                                            decoration: campotextodec.copyWith(
+                                                  hintText: "Primeiro nome*",
+                                                  prefixIcon: icone(Icons.person_outline),
+                                                  contentPadding: EdgeInsets.only(right: 20)
+                                                ),
+                                            onChanged: (valor){
+                                              setState(() => nome = valor);
+                                            },
+                                          ),
                                         ),
-                                    onChanged: (valor){
-                                      setState(() => nome = valor);
-                                    },
+                                      ),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Container(
+                                          margin: EdgeInsets.only(left: 5),
+                                          child: TextFormField(
+                                            validator: (val) => val!.isEmpty ? "Coloque seu sobrenome" : null,
+                                            keyboardType: TextInputType.text,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(fontSize: 15),
+                                            decoration: campotextodec.copyWith(
+                                                  hintText: "Sobrenome*",
+                                                  contentPadding: EdgeInsets.symmetric(horizontal: 20)
+                                                ),
+                                            onChanged: (valor){
+                                              setState(() => sobrenome = valor);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                                 Container(
@@ -154,7 +192,7 @@ class _RegistrarState extends State<Registrar> {
                                               lastDate: DateTime.now()
                                             ).then((valor) {
                                               setState(() {
-                                                nasc = valor;
+                                                if(valor != null) nasc = valor;
                                               });
                                             });
                                           },
@@ -173,291 +211,292 @@ class _RegistrarState extends State<Registrar> {
                               ],
                             )
                           ),
-                        )
-                      ),
-                      Step(
-                        title: Text("Senha", style: TextStyle(color: Colors.amber),),
-                        content: Container(
-                          height: MediaQuery.of(context).size.height - 255,
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical:15),
-                                child: TextFormField(
-                                  validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
-                                  obscureText: true,
-                                  keyboardType: TextInputType.text,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 15),
-                                  decoration: campotextodec.copyWith(
-                                        hintText: "Digite sua senha*",
-                                        prefixIcon: icone(Icons.vpn_key_outlined)
-                                      ),
-                                  onChanged: (valor){
-                                    setState(() => senha = valor);
-                                  },
-                                ),
-                              ),
-                              SenhaSegura(senha: senha),
-                              Container(
-                                child: TextFormField(
-                                  validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
-                                  obscureText: true,
-                                  keyboardType: TextInputType.text,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 15),
-                                  decoration: campotextodec.copyWith(
-                                        hintText: "Confirme sua senha*",
-                                        prefixIcon: icone(Icons.vpn_key_outlined)
-                                      ),
-                                  onChanged: (valor){
-                                    setState(() => senha = valor);
-                                  },
-                                  
-                                ),
-                              ),
-                            ],
-                          )
-                        )
-                      ),
-                      
-                      Step(
-                        title: Text("Toque final", style: TextStyle(color: Colors.amber),),
-                        content: Container(
-                          height: MediaQuery.of(context).size.height - 255,
-                          child: Column(
-                            children: [
-                              Stack(
-                                children: [
-                                  Container(
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                        //image: FileImage(_fotos),
-                                        image: colocarImagem(),
-                                        fit: BoxFit.cover,
-                                        colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
-                                      )   
-                                    ),
-                                    child: Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 15),
-                                        child: CircleAvatar(
-                                          radius: 60,
-                                          backgroundImage: colocarImagem(),
+                        ),
+                        
+                        Step(
+                          title: Text("Senha", style: TextStyle(color: Colors.amber),),
+                          content: Container(
+                            height: MediaQuery.of(context).size.height - 255,
+                            child: ListView(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical:15),
+                                  child: TextFormField(
+                                    validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
+                                    obscureText: true,
+                                    keyboardType: TextInputType.text,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 15),
+                                    decoration: campotextodec.copyWith(
+                                          hintText: "Digite sua senha*",
+                                          prefixIcon: icone(Icons.vpn_key_outlined)
                                         ),
+                                    onChanged: (valor){
+                                      setState(() => senha = valor);
+                                    },
+                                  ),
+                                ),
+                                SenhaSegura(senha: senha),
+                                Container(
+                                  child: TextFormField(
+                                    validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
+                                    obscureText: true,
+                                    keyboardType: TextInputType.text,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 15),
+                                    decoration: campotextodec.copyWith(
+                                          hintText: "Confirme sua senha*",
+                                          prefixIcon: icone(Icons.vpn_key_outlined)
+                                        ),
+                                    onChanged: (valor){
+                                      setState(() => senha = valor);
+                                    },
+                                    
+                                  ),
+                                ),
+                              ],
+                            )
+                          )
+                        ),
+                        
+                        Step(
+                          title: Text("Toque final", style: TextStyle(color: Colors.amber),),
+                          content: Container(
+                            height: MediaQuery.of(context).size.height - 255,
+                            child: ListView(
+                              children: [
+                                Stack(
+                                  children: [
+                                    Container(
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          //image: FileImage(_fotos),
+                                          image: colocarImagem(),
+                                          fit: BoxFit.cover,
+                                          colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
+                                        )   
+                                      ),
+                                      child: Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(vertical: 15),
+                                          child: CircleAvatar(
+                                            radius: 60,
+                                            backgroundImage: colocarImagem(),
+                                          ),
+                                        )
                                       )
-                                    )
-                                  ),
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: IconButton(
-                                      onPressed: () async {
-                                        var asd = await pegarimagem(true);
-                                        if (asd != null){
-                                          setState(() {
-                                            _fotoatual = asd;
-                                            foto = true;
-                                        });
-                                        }
-                                      }, 
-                                      icon: Icon(Icons.camera_alt_outlined, size: 40,color: Colors.white,)
-                                    )
-                                  ),
-                                  _fotoatual != null 
-                                    ? Align(
-                                      alignment: Alignment.centerRight,
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
                                       child: IconButton(
                                         onPressed: () async {
-                                          setState(() {
-                                            _fotoatual = null;
+                                          var asd = await pegarimagem(true);
+                                          if (asd != null){
+                                            setState(() {
+                                              _fotoatual = asd;
+                                              foto = true;
                                           });
+                                          }
                                         }, 
-                                        icon: Icon(Icons.delete_forever_outlined, size: 40,color: Colors.white,)
+                                        icon: Icon(Icons.camera_alt_outlined, size: 40,color: Colors.white,)
                                       )
-                                    )
-                                    : SizedBox.shrink()
-
-                                ],
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(bottom:0, top: 50),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Digite um nickname caso você não queira usar seu nome real, mas seja criativo, ou deixe em branco pra usar o nome real mesmo e azar, é us guri!", style: TextStyle(fontSize: 15),)),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical:15),
-                                height: 40,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 15),
-                                  decoration: campotextodec.copyWith(
-                                        contentPadding: EdgeInsets.only(left: 15),
-                                        hintText: "Nickname",
-                                      ),
-                                  onChanged: (valor){
-                                    setState(() => nickname = valor);
-                                  },
+                                    ),
+                                    _fotoatual != null 
+                                      ? Align(
+                                        alignment: Alignment.centerRight,
+                                        child: IconButton(
+                                          onPressed: () async {
+                                            setState(() {
+                                              _fotoatual = null;
+                                            });
+                                          }, 
+                                          icon: Icon(Icons.delete_forever_outlined, size: 40,color: Colors.white,)
+                                        )
+                                      )
+                                      : SizedBox.shrink()
+                
+                                  ],
                                 ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(top: 25),
-                                child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Digite uma frase maneira pra todos verem e pensarem 'uau, que frase maneira!!!'", style: TextStyle(fontSize: 15),)),
-                              ),
-                              Container(
-                                margin: EdgeInsets.symmetric(vertical:15),
-                                height: 40,
-                                child: TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(fontSize: 15),
-                                  decoration: campotextodec.copyWith(
-                                    contentPadding: EdgeInsets.only(left: 15),
-                                        hintText: "Digite uma frase maneira",
-                                      ),
-                                  onChanged: (valor){
-                                    setState(() => frase = valor);
-                                  },
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 25),
+                                Padding(
+                                  padding: EdgeInsets.only(bottom:0, top: 50),
                                   child: Align(
-                                    alignment: Alignment.bottomLeft,
-                                    child: Text("OBS: Essas informações podem ser colocadas mais tarde")
+                                    alignment: Alignment.centerLeft,
+                                    child: Text("Digite um nickname caso você não queira usar seu nome real, mas seja criativo, ou deixe em branco pra usar o nome real mesmo e azar, é us guri!", style: TextStyle(fontSize: 15),)),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical:15),
+                                  height: 40,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.text,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 15),
+                                    decoration: campotextodec.copyWith(
+                                          contentPadding: EdgeInsets.only(left: 15),
+                                          hintText: "Nickname",
+                                        ),
+                                    onChanged: (valor){
+                                      setState(() => nickname = valor);
+                                    },
                                   ),
                                 ),
-                              ),
-                            ],
+                                Padding(
+                                  padding: EdgeInsets.only(top: 25),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text("Digite uma frase maneira pra todos verem e pensarem 'uau, que frase maneira!!!'", style: TextStyle(fontSize: 15),)),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.symmetric(vertical:15),
+                                  height: 40,
+                                  child: TextFormField(
+                                    keyboardType: TextInputType.text,
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(fontSize: 15),
+                                    decoration: campotextodec.copyWith(
+                                      contentPadding: EdgeInsets.only(left: 15),
+                                          hintText: "Digite uma frase maneira",
+                                        ),
+                                    onChanged: (valor){
+                                      setState(() => frase = valor);
+                                    },
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 25),
+                                    child: Align(
+                                      alignment: Alignment.bottomLeft,
+                                      child: Text("OBS: Essas informações podem ser colocadas mais tarde")
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )
                           )
                         )
-                      )
-                    ],
-                    onStepContinue: (){
-                      if (stepAtual < 2) {
-                        setState(() {
-                          stepAtual += 1;
-                        });
-                      }
-                    },
-                    onStepCancel: (){
-                      if (stepAtual > 0) {
-                        setState(() {
-                          stepAtual -= 1;
-                        });
-                      }
-                    },
-                  ),
-                    /*child: Column(
-                      children: [
-                        Container(
-                          height: 85,
-                          child: TextFormField(
-                            validator: (val) => val!.isEmpty ? "Coloque seu nome" : null,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 17),
-                            decoration: campotextodec.copyWith(
-                                  hintText: "Nome de usuario",
-                                  prefixIcon: icone(Icons.person_outline)
-                                ),
-                            onChanged: (valor){
-                              setState(() => nome = valor);
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: 85,
-                          child: TextFormField(
-                            validator: (val) => val!.isEmpty ? "Coloque seu email" : null,
-                            keyboardType: TextInputType.emailAddress,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 17),
-                            decoration: campotextodec.copyWith(
-                                  hintText: "Email",
-                                  prefixIcon: icone(Icons.email_outlined)
-                                ),
-                            onChanged: (valor){
-                              setState(() => email = valor);
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: 85,
-                          child: TextFormField(
-                            validator: (val) => val!.isEmpty ? "Coloque a data do seu nascimento" : null,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 17),
-                            decoration: campotextodec.copyWith(
-                                  hintText: "Data de aniversario",
-                                  prefixIcon: icone(Icons.cake_outlined)
-                                ),
-                            onChanged: (valor){
-                              setState(() => nasc = "$valor");
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: 85,
-                          child: TextFormField(
-                            validator: (val) => val!.length < 5 ? "A senha deve ter no mínimo 6 caracteres " : null,
-                            obscureText: true,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 17),
-                            decoration: campotextodec.copyWith(
-                                  hintText: "Senha",
-                                  prefixIcon: icone(Icons.vpn_key_outlined)
-                                ),
-                            onChanged: (valor){
-                              setState(() => senha = valor);
-                            },
-                          ),
-                        ),  
-                        Container(
-                          height: 85,
-                          child: TextFormField(
-                            validator: (val) => val! != senha ? "As senhas não são iguais" : null,
-                            obscureText: true,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.left,
-                            style: TextStyle(fontSize: 17),
-                            decoration: campotextodec.copyWith(
-                                  hintText: "Confirmar senha",
-                                  prefixIcon: icone(Icons.vpn_key_outlined)
-                                ),
-                            onChanged: (valor){
-                              setState(() => confirmsenha = valor);
-                            },
-                          ),
-                        ),       
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 30),
-                          child: GestureDetector(
-                            child: RRegistrarButton(),
-                            onTap: () async {
-                              
-                              if (_formKey.currentState!.validate()){
-                                setState(() => carregando = true);
-                                dynamic resultado = await _auth.registrarUsuario(nome, email, nasc, senha);
-                                if (resultado == null){
-                                  setState(() => carregando = false);
-                                }
-                              }
-                              Navigator.of(context).pop(MaterialPageRoute(builder: (context)=>Login()));
-                            },
-                          ),
-                        )
                       ],
-                    ),*/
-                  ),
+                      onStepContinue: (){
+                        if (stepAtual < 2) {
+                          setState(() {
+                            stepAtual += 1;
+                          });
+                        }
+                      },
+                      onStepCancel: (){
+                        if (stepAtual > 0) {
+                          setState(() {
+                            stepAtual -= 1;
+                          });
+                        }
+                      },
+                    ),
+                      /*child: Column(
+                        children: [
+                          Container(
+                            height: 85,
+                            child: TextFormField(
+                              validator: (val) => val!.isEmpty ? "Coloque seu nome" : null,
+                              keyboardType: TextInputType.text,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 17),
+                              decoration: campotextodec.copyWith(
+                                    hintText: "Nome de usuario",
+                                    prefixIcon: icone(Icons.person_outline)
+                                  ),
+                              onChanged: (valor){
+                                setState(() => nome = valor);
+                              },
+                            ),
+                          ),
+                          Container(
+                            height: 85,
+                            child: TextFormField(
+                              validator: (val) => val!.isEmpty ? "Coloque seu email" : null,
+                              keyboardType: TextInputType.emailAddress,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 17),
+                              decoration: campotextodec.copyWith(
+                                    hintText: "Email",
+                                    prefixIcon: icone(Icons.email_outlined)
+                                  ),
+                              onChanged: (valor){
+                                setState(() => email = valor);
+                              },
+                            ),
+                          ),
+                          Container(
+                            height: 85,
+                            child: TextFormField(
+                              validator: (val) => val!.isEmpty ? "Coloque a data do seu nascimento" : null,
+                              keyboardType: TextInputType.text,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 17),
+                              decoration: campotextodec.copyWith(
+                                    hintText: "Data de aniversario",
+                                    prefixIcon: icone(Icons.cake_outlined)
+                                  ),
+                              onChanged: (valor){
+                                setState(() => nasc = "$valor");
+                              },
+                            ),
+                          ),
+                          Container(
+                            height: 85,
+                            child: TextFormField(
+                              validator: (val) => val!.length < 5 ? "A senha deve ter no mínimo 6 caracteres " : null,
+                              obscureText: true,
+                              keyboardType: TextInputType.text,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 17),
+                              decoration: campotextodec.copyWith(
+                                    hintText: "Senha",
+                                    prefixIcon: icone(Icons.vpn_key_outlined)
+                                  ),
+                              onChanged: (valor){
+                                setState(() => senha = valor);
+                              },
+                            ),
+                          ),  
+                          Container(
+                            height: 85,
+                            child: TextFormField(
+                              validator: (val) => val! != senha ? "As senhas não são iguais" : null,
+                              obscureText: true,
+                              keyboardType: TextInputType.text,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(fontSize: 17),
+                              decoration: campotextodec.copyWith(
+                                    hintText: "Confirmar senha",
+                                    prefixIcon: icone(Icons.vpn_key_outlined)
+                                  ),
+                              onChanged: (valor){
+                                setState(() => confirmsenha = valor);
+                              },
+                            ),
+                          ),       
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 30),
+                            child: GestureDetector(
+                              child: RRegistrarButton(),
+                              onTap: () async {
+                                
+                                if (_formKey.currentState!.validate()){
+                                  setState(() => carregando = true);
+                                  dynamic resultado = await _auth.registrarUsuario(nome, email, nasc, senha);
+                                  if (resultado == null){
+                                    setState(() => carregando = false);
+                                  }
+                                }
+                                Navigator.of(context).pop(MaterialPageRoute(builder: (context)=>Login()));
+                              },
+                            ),
+                          )
+                        ],
+                      ),*/
+                    ),
+                ),
                 ),
               )
           ],
