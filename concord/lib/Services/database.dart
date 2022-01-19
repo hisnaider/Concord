@@ -16,12 +16,14 @@ class DatabaseService {
 
   final CollectionReference usuariosCollection = FirebaseFirestore.instance.collection("Usuarios");
 
-  Future atualizarDadosUser(String nome, String birth, String foto) async {
+  Future atualizarDadosUser(String nome, String email, DateTime birth, String foto, String nickname, String frase) async {
     return await usuariosCollection.doc(uid).set({
       "nome": nome,
+      "email": email,
       "birth": birth,
       "foto": foto,
-      "frase": "frase legal"
+      "nickname": nickname,
+      "frase": frase
       }
     );
   }
@@ -43,8 +45,10 @@ class DatabaseService {
   UserData _userDataSnapshot(DocumentSnapshot snapshot){
     return UserData(
       id: snapshot.id,
+      nickname: snapshot["nickname"] ?? "",
       nome: snapshot["nome"],
-      birth: snapshot["birth"],
+      email: snapshot["email"] ?? "",
+      birth: snapshot["birth"] ?? "",
       foto: snapshot["foto"],
       frase: snapshot["frase"]
       
@@ -87,7 +91,9 @@ class DatabaseService {
   UserData _otherUserDataSnapshot(DocumentSnapshot snapshot){
     return UserData(
       id: snapshot.id,
+      nickname: snapshot["nickname"],
       nome: snapshot["nome"],
+      email: snapshot["email"],
       birth: snapshot["birth"],
       foto: snapshot["foto"],
       frase: snapshot["frase"]

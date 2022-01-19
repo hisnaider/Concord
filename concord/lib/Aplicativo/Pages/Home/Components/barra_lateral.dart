@@ -35,9 +35,11 @@ class _BarraLateralState extends State<BarraLateral> {
   bool edit_tema = false;
   bool sobre_app = false;
 
+  String? _nicknameatual;
   String? _nomeatual;
-  String? _birthatual;
+  DateTime? _birthatual;
   String? _fotoatual;
+  String? _fraseatual;
 
   DatabaseImagens img = DatabaseImagens();
   Autenticador auth = Autenticador();
@@ -66,9 +68,12 @@ class _BarraLateralState extends State<BarraLateral> {
 
   @override
   Widget build(BuildContext context) {
+    _nicknameatual = widget.usuario?.nickname;
     _nomeatual = widget.usuario?.nome;
     _birthatual = widget.usuario?.birth;
     _fotoatual = widget.usuario?.foto;
+    _fraseatual = widget.usuario?.frase;
+
     return BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
 
@@ -101,12 +106,12 @@ class _BarraLateralState extends State<BarraLateral> {
                           });
                           await widget.database?.atualizarDadosUser(
                               _nomeatual!, 
+                              widget.usuario!.email,
                               _birthatual!, 
-                              _fotoatual!
+                              _fotoatual!,
+                              _nicknameatual!,
+                              _fraseatual!, 
                             );
-                          
-                          
-                          
                         }, 
                         icon: Icon(
                           Icons.camera_alt_outlined,
@@ -125,7 +130,7 @@ class _BarraLateralState extends State<BarraLateral> {
                                 backgroundImage: NetworkImage(_fotoatual!),
                                 ),
                               ),
-                            Text(_nomeatual!,
+                            Text(_nicknameatual!,
                             style: TextStyle(
                               fontSize: 20,
                               color: cor_texto,
@@ -163,7 +168,7 @@ class _BarraLateralState extends State<BarraLateral> {
                               flex: 1,
                               
                               child: TextFormField(
-                                initialValue: widget.usuario!.nome,
+                                initialValue: widget.usuario!.nickname,
                                 validator: (val) => val!.isEmpty ? "Digite um nome" : null,
                                 textAlign: TextAlign.left,
                               

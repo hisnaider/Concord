@@ -47,8 +47,10 @@ class _HomeState extends State<Home> {
       stream: DatabaseService(uid: user!.id).userData,
       builder: (context, snapshot) {
         UserData? userdata = snapshot.data;
+
+
         if(snapshot.hasData){
-          infoUser(user.id,userdata!.foto,userdata.nome);
+          infoUser(user.id,userdata!.foto,userdata.nickname);
           return Scaffold(
             drawer: BarraLateral(usuario: userdata, database: DatabaseService(uid: user.id),),
             appBar: AppBar(

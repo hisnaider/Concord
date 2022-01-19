@@ -17,7 +17,8 @@ const campotextodec = InputDecoration(
 );
 
 Widget icone(icon) => Padding(padding: 
-              EdgeInsets.zero,child: Icon(
+              EdgeInsets.zero,
+              child: Icon(
                 icon,
                 color: cor_primaria,
                 size: 25,

@@ -1,5 +1,8 @@
 
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:concord/Services/imagens.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'package:concord/Aplicativo/Components/campotexto.dart';
@@ -22,7 +25,7 @@ class Registrar extends StatefulWidget {
 
 class _RegistrarState extends State<Registrar> {
 
-  final _formKey = GlobalKey<FormState>();
+  List<GlobalKey<FormState>> _formKey = [GlobalKey<FormState>(), GlobalKey<FormState>()];
 
 
   String nome = "";
@@ -35,11 +38,14 @@ class _RegistrarState extends State<Registrar> {
   String frase = "";
   bool carregando = false;
 
+  bool emailExiste = false;
+  int idade = 18;
   bool foto = false;
-
   int stepAtual = 0;
-
   File? _fotoatual;
+
+  DatabaseImagens img = DatabaseImagens();
+  Autenticador registrar = Autenticador();
 
   Future pegarimagem(bool galeria) async {
     ImagePicker picker = ImagePicker();
@@ -50,7 +56,19 @@ class _RegistrarState extends State<Registrar> {
     return null;
   }
 
-  
+  Future enviarImagem(String endereco) async {
+    Reference ref = FirebaseStorage.instance.ref().child(endereco);
+    await img.salvarimagem(_fotoatual!, endereco);
+
+  }
+
+  int Idade(){
+    int anos = DateTime.now().year - nasc!.year;
+    int meses = DateTime.now().month - nasc!.month;
+    int dias = DateTime.now().day - nasc!.day;
+    if(meses < 0 || (meses == 0 && dias < 0)) anos--;
+    return anos;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,19 +76,15 @@ class _RegistrarState extends State<Registrar> {
     if (_fotoatual != null) return FileImage(_fotoatual!);
     else return NetworkImage(sem_foto);
   }
+    FirebaseFirestore.instance.collection("EmailsCadastrados").doc(email == "" ? " " : email).get().then((value) => emailExiste = value.exists);
     return carregando ? TelaDeLoading() : Material(
       child: Scaffold(
         appBar: AppBar(
           title: Text("Registrar"),
         ),
-        body: Column(
-          children: [
-            Expanded(
-              flex: 4,
+        body: Container(
               child: Center(
-                child: Form(
-                  key: _formKey,
-                  child: Container(
+                child: Container(
                     child: Stepper(
                       controlsBuilder: (BuildContext context, ControlsDetails details) {
                         return Row(
@@ -83,7 +97,7 @@ class _RegistrarState extends State<Registrar> {
                             ),
                             TextButton(
                               onPressed: details.onStepContinue, 
-                              child: Text(stepAtual < 2 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: cor_primaria))
+                              child: Text(stepAtual < 3 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: cor_primaria))
                             ),
                           ],
                         );
@@ -92,178 +106,209 @@ class _RegistrarState extends State<Registrar> {
                       currentStep: stepAtual,
                       steps: [
                         Step(
-                          title: Text("Usuario", style: TextStyle(color: Colors.amber),),
-                          content: Container(
-                            height: MediaQuery.of(context).size.height - 255,
-                            child: ListView(
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text("Informações basicas", style: TextStyle(fontSize: 20),)
-                                ),
-                                Row(
-                                  children: [
-                                    
-                                  ],
-                                ),
-
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical:15),
-                                  child: Row(
+                          title: Text("Usuario", style: TextStyle(color: Colors.amber, fontSize: 12),),
+                          content: Form(
+                            key: _formKey[0],
+                            child: Container(
+                              height: MediaQuery.of(context).size.height - 255,
+                              child: stepAtual == 0 
+                              ? ListView(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Text("Informações basicas", style: TextStyle(fontSize: 20),)
+                                  ),
+                                  Row(
                                     children: [
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          margin: EdgeInsets.only(right: 5),
-                                          child: TextFormField(
-                                            validator: (val) => val!.isEmpty ? "Coloque seu primeiro nome" : null,
-                                            keyboardType: TextInputType.text,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(fontSize: 15),
-                                            decoration: campotextodec.copyWith(
-                                                  hintText: "Primeiro nome*",
-                                                  prefixIcon: icone(Icons.person_outline),
-                                                  contentPadding: EdgeInsets.only(right: 20)
-                                                ),
-                                            onChanged: (valor){
-                                              setState(() => nome = valor);
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        flex: 1,
-                                        child: Container(
-                                          margin: EdgeInsets.only(left: 5),
-                                          child: TextFormField(
-                                            validator: (val) => val!.isEmpty ? "Coloque seu sobrenome" : null,
-                                            keyboardType: TextInputType.text,
-                                            textAlign: TextAlign.left,
-                                            style: TextStyle(fontSize: 15),
-                                            decoration: campotextodec.copyWith(
-                                                  hintText: "Sobrenome*",
-                                                  contentPadding: EdgeInsets.symmetric(horizontal: 20)
-                                                ),
-                                            onChanged: (valor){
-                                              setState(() => sobrenome = valor);
-                                            },
-                                          ),
-                                        ),
-                                      ),
+                                      
                                     ],
                                   ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical:15),
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque seu email" : null,
-                                    keyboardType: TextInputType.emailAddress,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Email*",
-                                          prefixIcon: icone(Icons.email_outlined)
+                          
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical:15),
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            margin: EdgeInsets.only(right: 5),
+                                            child: TextFormField(
+                                              textCapitalization: TextCapitalization.words,
+                                              validator: (val) {
+                                                if(val!.isEmpty) return "Coloque seu primeiro nome"; 
+                                                else if (val.contains(" ")) return "O primeiro nome não pode conter espaço";
+                                                else return null;
+                                              },
+                                              keyboardType: TextInputType.text,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(fontSize: 15),
+                                              decoration: campotextodec.copyWith(
+                                                    hintText: "Primeiro nome*",
+                                                    prefixIcon: icone(Icons.person_outline),
+                                                    contentPadding: EdgeInsets.only(right: 20)
+                                                  ),
+                                              onChanged: (valor){
+                                                setState(() => nome = valor);
+                                              },
+                                            ),
+                                          ),
                                         ),
-                                    onChanged: (valor){
-                                      setState(() => email = valor);
-                                    },
+                                        Expanded(
+                                          flex: 1,
+                                          child: Container(
+                                            margin: EdgeInsets.only(left: 5),
+                                            child: TextFormField(
+                                              textCapitalization: TextCapitalization.words,
+                                              validator: (val) => val!.isEmpty ? "Coloque seu sobrenome" : null,
+                                              keyboardType: TextInputType.text,
+                                              textAlign: TextAlign.left,
+                                              style: TextStyle(fontSize: 15),
+                                              decoration: campotextodec.copyWith(
+                                                    hintText: "Sobrenome*",
+                                                    contentPadding: EdgeInsets.symmetric(horizontal: 20)
+                                                  ),
+                                              onChanged: (valor){
+                                                setState(() => sobrenome = valor);
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical:15),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Container(
-                                        margin: EdgeInsets.only(right: 10),
-                                        decoration: BoxDecoration(
-                                          color: Color.fromRGBO(40, 40, 40,1),                                        
-                                          border: Border.all(color: Colors.white,width: 0.5),
-                                          borderRadius: BorderRadius.all(Radius.circular(90))
-                                        ),
-                                        
-                                        child: IconButton(
-                                          onPressed: (){
-                                            showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(1901),
-                                              lastDate: DateTime.now()
-                                            ).then((valor) {
-                                              setState(() {
-                                                if(valor != null) nasc = valor;
+                                  Container(
+                                    margin: EdgeInsets.symmetric(vertical:15),
+                                    child: TextFormField(
+                                      validator: (val) {
+                                        if (val!.isEmpty) return "Coloque seu email";
+                                        else if (!EmailValidator.validate(email)) return "Digite um email valido, carai";
+                                        else if(emailExiste) return "Esse email não pode ser usado";
+                                        else return null;
+                                      },
+                                      keyboardType: TextInputType.emailAddress,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 15),
+                                      decoration: campotextodec.copyWith(
+                                            hintText: "Email*",
+                                            prefixIcon: icone(Icons.email)
+                                          ),
+                                      onChanged: (valor){
+                                        setState(() => email = valor);
+                                      },
+                                    ),
+                                  ),
+                                
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(vertical:15),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: EdgeInsets.only(right: 10),
+                                          decoration: BoxDecoration(
+                                            color: Color.fromRGBO(40, 40, 40,1),                                        
+                                            border: Border.all(color: idade > 12 ? Colors.white70 : Colors.red,width: 0.7),
+                                            borderRadius: BorderRadius.all(Radius.circular(90))
+                                          ),
+                                          
+                                          child: IconButton(
+                                            onPressed: (){
+                                              showDatePicker(
+                                                context: context,
+                                                initialDate: nasc!,
+                                                firstDate: DateTime(1901),
+                                                lastDate: DateTime.now()
+                                              ).then((valor) {
+                                                setState(() {
+                                                  if(valor != null){
+                                                    nasc = valor;
+                                                  } 
+                                                });
                                               });
-                                            });
-                                          },
-                                          icon: Icon(Icons.calendar_today_outlined,color: Colors.amber,)
+                                            },
+                                            icon: Icon(Icons.calendar_today_outlined,color: Colors.amber,)
+                                          ),
                                         ),
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text("Data de nascimento*"),
-                                          Text(DateFormat('dd/MM/yyyy').format(nasc!),style: TextStyle(fontSize: 25),),
-                                        ],
-                                      )
-                                    ]
+                                        Column(
+                                          children: [
+                                            Text("Data de nascimento*",style: TextStyle(color: idade > 12 ? cor_texto : Colors.red[700]),),
+                                            Text(DateFormat('dd/MM/yyyy').format(nasc!),style: TextStyle(fontSize: 25, color: idade> 12 ? cor_texto : Colors.red[700]),),
+                                          ],
+                                        ),
+                                      ]
+                                    ),
                                   ),
-                                ) 
-                              ],
-                            )
+                                  idade < 13 ? Text("Você é menor, vai jogar Fortnite!",style: TextStyle(fontSize: 12 ,color: Colors.red[700])) : SizedBox.shrink()
+
+                                ],
+                              )
+                              : SizedBox.shrink()
+                            ),
                           ),
                         ),
                         
                         Step(
-                          title: Text("Senha", style: TextStyle(color: Colors.amber),),
-                          content: Container(
-                            height: MediaQuery.of(context).size.height - 255,
-                            child: ListView(
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.symmetric(vertical:15),
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
-                                    obscureText: true,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Digite sua senha*",
-                                          prefixIcon: icone(Icons.vpn_key_outlined)
-                                        ),
-                                    onChanged: (valor){
-                                      setState(() => senha = valor);
-                                    },
+                          title: Text("Senha", style: TextStyle(color: Colors.amber, fontSize: 12),),
+                          content: Form(
+                            key: _formKey[1],
+                            child: Container(
+                              height: MediaQuery.of(context).size.height - 255,
+                              child: stepAtual == 1 
+                              ? ListView(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.symmetric(vertical:15),
+                                    child: TextFormField(
+                                      validator: (val) {
+                                        if (val!.isEmpty) return "Digite uma senha";
+                                        else if (senha.contains(" ")) return "A senha não pode conter espaço";
+                                        else if(senha.length < 5) return "A senha é muito pequena";
+                                        else return null;
+                                        },
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 15),
+                                      decoration: campotextodec.copyWith(
+                                        hintText: "Digite sua senha*",
+                                        prefixIcon: icone(Icons.vpn_key_outlined)
+                                      ),
+                                      onChanged: (valor){
+                                        setState(() => senha = valor);
+                                      },
+                                    ),
                                   ),
-                                ),
-                                SenhaSegura(senha: senha),
-                                Container(
-                                  child: TextFormField(
-                                    validator: (val) => val!.isEmpty ? "Coloque uma senha" : null,
-                                    obscureText: true,
-                                    keyboardType: TextInputType.text,
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(fontSize: 15),
-                                    decoration: campotextodec.copyWith(
-                                          hintText: "Confirme sua senha*",
-                                          prefixIcon: icone(Icons.vpn_key_outlined)
-                                        ),
-                                    onChanged: (valor){
-                                      setState(() => senha = valor);
-                                    },
-                                    
+                                  SenhaSegura(senha: senha),
+                                  Container(
+                                    child: TextFormField(
+                                      validator: (val) {
+                                        print(val == senha);
+                                        if (val!.isEmpty) return "Preencha esse campo";
+                                        else if (val != senha ) return "As senhas não estão iguais";
+                                        else return null;},
+                                      obscureText: true,
+                                      keyboardType: TextInputType.text,
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(fontSize: 15),
+                                      decoration: campotextodec.copyWith(
+                                        hintText: "Confirme sua senha*",
+                                        prefixIcon: icone(Icons.vpn_key_outlined)
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            )
+                                ],
+                              )
+                              : SizedBox.shrink()
+                            ),
                           )
                         ),
                         
                         Step(
-                          title: Text("Toque final", style: TextStyle(color: Colors.amber),),
+                          title: Text("Toque final", style: TextStyle(color: Colors.amber, fontSize: 12),),
                           content: Container(
                             height: MediaQuery.of(context).size.height - 255,
-                            child: ListView(
+                            child: stepAtual == 2 
+                            ? ListView(
                               children: [
                                 Stack(
                                   children: [
@@ -328,6 +373,7 @@ class _RegistrarState extends State<Registrar> {
                                   margin: EdgeInsets.symmetric(vertical:15),
                                   height: 40,
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.words,
                                     keyboardType: TextInputType.text,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 15),
@@ -350,6 +396,7 @@ class _RegistrarState extends State<Registrar> {
                                   margin: EdgeInsets.symmetric(vertical:15),
                                   height: 40,
                                   child: TextFormField(
+                                    textCapitalization: TextCapitalization.sentences,
                                     keyboardType: TextInputType.text,
                                     textAlign: TextAlign.left,
                                     style: TextStyle(fontSize: 15),
@@ -362,8 +409,7 @@ class _RegistrarState extends State<Registrar> {
                                     },
                                   ),
                                 ),
-                                Expanded(
-                                  flex: 1,
+                                Container(
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(vertical: 25),
                                     child: Align(
@@ -374,11 +420,106 @@ class _RegistrarState extends State<Registrar> {
                                 ),
                               ],
                             )
+                            :SizedBox.shrink()
+                          )
+                        ),
+                        Step(
+                          title: Text("Revisão", style: TextStyle(color: Colors.amber, fontSize: 12),),
+                          content: Container(
+                            height: MediaQuery.of(context).size.height - 255,
+                            child: stepAtual == 3 
+                            ? ListView(
+                              children: [
+                                
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Text("Nome: ", style: TextStyle(fontSize: 23, color: Colors.amber),),
+                                    Text("$nome $sobrenome" ),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Text("Email: ", style: TextStyle(fontSize: 23, color: Colors.amber),),
+                                    Text("$email"),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Text("Data de nascimento: ", style: TextStyle(fontSize: 23, color: Colors.amber),),
+                                    Text(DateFormat('dd/MM/yyyy').format(nasc!)),
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Container(
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      //image: FileImage(_fotos),
+                                      image: colocarImagem(),
+                                      fit: BoxFit.cover,
+                                      colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
+                                    )   
+                                  ),
+                                  child: Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(vertical: 15),
+                                      child: CircleAvatar(
+                                        radius: 60,
+                                        backgroundImage: colocarImagem(),
+                                      ),
+                                    )
+                                  )
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Text("Nickname: ", style: TextStyle(fontSize: 23, color: Colors.amber),),
+                                    nickname != "" 
+                                      ? Text("$nickname",maxLines: 3,overflow: TextOverflow.ellipsis,)
+                                      : Text("Nenhum nickname foi digitado", style: TextStyle(color: Colors.grey[600], fontStyle: FontStyle.italic),)
+                                  ],
+                                ),
+                                SizedBox(height: 20),
+                                Row(
+                                  children: [
+                                    Text("Frase: ", style: TextStyle(fontSize: 23, color: Colors.amber),),
+                                    Expanded(
+                                      flex: 1,
+                                      child: frase != "" 
+                                        ? Text("$frase",maxLines: 3,overflow: TextOverflow.ellipsis,)
+                                        : Text("Nenhuma frase foi digitada", style: TextStyle(color: Colors.grey[600], fontStyle: FontStyle.italic),)
+                                      )
+                                  ],
+                                ),
+                              ],
+                            )
+                            : SizedBox.shrink()
                           )
                         )
                       ],
                       onStepContinue: (){
-                        if (stepAtual < 2) {
+                        if(stepAtual == 0)
+                        {
+                          setState(() {
+                          idade = Idade();
+                          
+
+                        });
+                        }
+                        if (stepAtual < 2){
+                          if (_formKey[stepAtual].currentState!.validate() && idade > 12){
+                            setState(() {
+                              stepAtual += 1;
+                            });
+                          }
+                        }
+                        else if (stepAtual == 3){
+                          registrar.registrarUsuario("$nome $sobrenome", email, nasc!, _fotoatual, nickname, frase, senha);
+                        }
+                        else {
                           setState(() {
                             stepAtual += 1;
                           });
@@ -390,116 +531,10 @@ class _RegistrarState extends State<Registrar> {
                             stepAtual -= 1;
                           });
                         }
-                      },
-                    ),
-                      /*child: Column(
-                        children: [
-                          Container(
-                            height: 85,
-                            child: TextFormField(
-                              validator: (val) => val!.isEmpty ? "Coloque seu nome" : null,
-                              keyboardType: TextInputType.text,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 17),
-                              decoration: campotextodec.copyWith(
-                                    hintText: "Nome de usuario",
-                                    prefixIcon: icone(Icons.person_outline)
-                                  ),
-                              onChanged: (valor){
-                                setState(() => nome = valor);
-                              },
-                            ),
-                          ),
-                          Container(
-                            height: 85,
-                            child: TextFormField(
-                              validator: (val) => val!.isEmpty ? "Coloque seu email" : null,
-                              keyboardType: TextInputType.emailAddress,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 17),
-                              decoration: campotextodec.copyWith(
-                                    hintText: "Email",
-                                    prefixIcon: icone(Icons.email_outlined)
-                                  ),
-                              onChanged: (valor){
-                                setState(() => email = valor);
-                              },
-                            ),
-                          ),
-                          Container(
-                            height: 85,
-                            child: TextFormField(
-                              validator: (val) => val!.isEmpty ? "Coloque a data do seu nascimento" : null,
-                              keyboardType: TextInputType.text,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 17),
-                              decoration: campotextodec.copyWith(
-                                    hintText: "Data de aniversario",
-                                    prefixIcon: icone(Icons.cake_outlined)
-                                  ),
-                              onChanged: (valor){
-                                setState(() => nasc = "$valor");
-                              },
-                            ),
-                          ),
-                          Container(
-                            height: 85,
-                            child: TextFormField(
-                              validator: (val) => val!.length < 5 ? "A senha deve ter no mínimo 6 caracteres " : null,
-                              obscureText: true,
-                              keyboardType: TextInputType.text,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 17),
-                              decoration: campotextodec.copyWith(
-                                    hintText: "Senha",
-                                    prefixIcon: icone(Icons.vpn_key_outlined)
-                                  ),
-                              onChanged: (valor){
-                                setState(() => senha = valor);
-                              },
-                            ),
-                          ),  
-                          Container(
-                            height: 85,
-                            child: TextFormField(
-                              validator: (val) => val! != senha ? "As senhas não são iguais" : null,
-                              obscureText: true,
-                              keyboardType: TextInputType.text,
-                              textAlign: TextAlign.left,
-                              style: TextStyle(fontSize: 17),
-                              decoration: campotextodec.copyWith(
-                                    hintText: "Confirmar senha",
-                                    prefixIcon: icone(Icons.vpn_key_outlined)
-                                  ),
-                              onChanged: (valor){
-                                setState(() => confirmsenha = valor);
-                              },
-                            ),
-                          ),       
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 30),
-                            child: GestureDetector(
-                              child: RRegistrarButton(),
-                              onTap: () async {
-                                
-                                if (_formKey.currentState!.validate()){
-                                  setState(() => carregando = true);
-                                  dynamic resultado = await _auth.registrarUsuario(nome, email, nasc, senha);
-                                  if (resultado == null){
-                                    setState(() => carregando = false);
-                                  }
-                                }
-                                Navigator.of(context).pop(MaterialPageRoute(builder: (context)=>Login()));
-                              },
-                            ),
-                          )
-                        ],
-                      ),*/
-                    ),
-                ),
-                ),
-              )
-          ],
+                },
+              ),
+            ),
+          ),
         ),
       ),
     );

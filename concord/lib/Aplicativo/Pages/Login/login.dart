@@ -146,18 +146,6 @@ class _LoginState extends State<Login> {
                           },
                       ),
                     ),
-                    /*GestureDetector(
-                      onTap: () async {
-                        dynamic resultado = await _auth.sign();
-                        if (resultado == null) print("erro");
-                        else {
-                          print("certo");
-                          print(resultado.id);
-                        }
-                      },
-                      child: Text("Click aqui pra logar de forma anonima"),
-                    ),*/
-                          
                     Divider(
                       height: 40,
                       color: Colors.black
@@ -167,7 +155,7 @@ class _LoginState extends State<Login> {
                       padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
                       child: Center(child: Text("Caso não tenha uma conta, crie uma, é de graça!!!",style: TextStyle(fontSize: 17),textAlign: TextAlign.center,)),
                     ),
-                    RegistrarButton(),
+                    RegistrarButton()
                         
                   ],
                 ),

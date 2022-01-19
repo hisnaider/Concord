@@ -37,7 +37,7 @@ class SolicCard extends StatelessWidget {
                     flex: 1,
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(contato.nome, style: TextStyle(fontSize: 15),),
+                      child: Text(contato.nickname, style: TextStyle(fontSize: 15),),
                     ),
                   ),
                   Column(
