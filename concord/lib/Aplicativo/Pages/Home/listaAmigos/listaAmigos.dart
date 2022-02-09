@@ -15,12 +15,13 @@ class ListaAmigos extends StatefulWidget {
 
 
 class _ListaAmigosState extends State<ListaAmigos> {
-  Widget a(){
+  Widget amigos(){
     return StreamBuilder<List<AmigosUser>>(
       stream: DatabaseService(uid: widget.userid).amigos(),
       builder: (context, snapshot){
         if (snapshot.hasData) {
           final contatos = snapshot.data?.toList();
+          contatos?.map((e) => print(e));
           return Column(
             children: [
               Expanded(
@@ -50,7 +51,7 @@ class _ListaAmigosState extends State<ListaAmigos> {
           
         ],
       ),
-      body: a()
+      body: amigos()
     );
   }
 }

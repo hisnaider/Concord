@@ -3,10 +3,11 @@
 ///import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
-import 'package:concord/Aplicativo/Pages/Home/Components/barra_lateral.dart';
+import 'package:concord/Aplicativo/Pages/Home/barra_lateral/barra_lateral.dart';
 import 'package:concord/Aplicativo/Pages/Home/addAmigo/addAmigo.dart';
 import 'package:concord/Aplicativo/Pages/Home/listaAmigos/listaAmigos.dart';
 import 'package:concord/Config/geral.dart';
+import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/models/contatos.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/imagens.dart';
@@ -15,7 +16,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:provider/provider.dart';
-import 'contatoslista.dart';
+import 'Conversas/conversas.dart';
 
 // ignore: must_be_immutable
 class Home extends StatefulWidget {
@@ -27,7 +28,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
 
-
+  Autenticador auth = Autenticador();
   DatabaseImagens img = DatabaseImagens();
   //final Autenticador _auth = Autenticador(); 
 
@@ -41,14 +42,11 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
 
     final user = Provider.of<Myuser?>(context);
-
-
     return StreamBuilder<UserData>(
       stream: DatabaseService(uid: user!.id).userData,
       builder: (context, snapshot) {
         UserData? userdata = snapshot.data;
-
-
+        print(snapshot);
         if(snapshot.hasData){
           infoUser(user.id,userdata!.foto,userdata.nickname);
           return Scaffold(
@@ -80,9 +78,8 @@ class _HomeState extends State<Home> {
           ),
           body: Column(
             children: [
-              Expanded(
-                child: Container()///ContatosLista()
-              ),
+              Conversas(),
+              
               Container(
                 height: 50,
                 width: double.infinity,
@@ -106,6 +103,7 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.zero,
                         icon: Icon(Icons.person_add_alt_outlined,color: cor_texto, size: 30,),
                         onPressed: () {  
+                          print(Timestamp.now());
                           Navigator.of(context).push(MaterialPageRoute(builder: (context)=>AddAmigos(userid: user.id)));
                         },
                       )

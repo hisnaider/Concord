@@ -21,15 +21,17 @@ class AddAmigos extends StatefulWidget {
 
 class _AddAmigosState extends State<AddAmigos> {
 
-  String nome = " ";
+  String nickname = " ";
   bool adicionar = true;
 
 
   Widget adduser(){
     return StreamBuilder<List<ContatoUser>>(
-      stream: DatabaseService(uid: "").addUser(nome),
+      stream: DatabaseService(uid: "").addUser(nickname),
       builder: (context, snapshot) {
+        print(snapshot.data);
         if (snapshot.hasData){
+          print(snapshot.data?.length);
           final contatos = snapshot.data?.toList();
           return Column(
             children: [
@@ -43,8 +45,8 @@ class _AddAmigosState extends State<AddAmigos> {
                   ),
                   onChanged: (valor){
                     setState(() {
-                      nome = valor;
-                      if (nome == "") nome = " ";
+                      nickname = valor;
+                      if (nickname == "") nickname = " ";
                     });
                   },
                 ),
@@ -58,6 +60,7 @@ class _AddAmigosState extends State<AddAmigos> {
                   
                     itemCount: contatos!.length,
                     itemBuilder: (BuildContext context, int index) {
+                      print(contatos[index].id != widget.userid);
                       if (contatos[index].id != widget.userid){
                         var user = FirebaseFirestore.instance.collection("Usuarios").doc(contatos[index].id).collection("Amigos").doc(widget.userid);
                       return UserCard(contato: contatos[index], doc: user);

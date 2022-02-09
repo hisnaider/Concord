@@ -40,7 +40,6 @@ class _RegistrarState extends State<Registrar> {
 
   bool emailExiste = false;
   int idade = 18;
-  bool foto = false;
   int stepAtual = 0;
   File? _fotoatual;
 
@@ -73,9 +72,9 @@ class _RegistrarState extends State<Registrar> {
   @override
   Widget build(BuildContext context) {
     ImageProvider<Object> colocarImagem(){
-    if (_fotoatual != null) return FileImage(_fotoatual!);
-    else return NetworkImage(sem_foto);
-  }
+      if (_fotoatual != null) return FileImage(_fotoatual!);
+      else return NetworkImage(sem_foto);
+    }
     FirebaseFirestore.instance.collection("EmailsCadastrados").doc(email == "" ? " " : email).get().then((value) => emailExiste = value.exists);
     return carregando ? TelaDeLoading() : Material(
       child: Scaffold(
@@ -340,7 +339,6 @@ class _RegistrarState extends State<Registrar> {
                                           if (asd != null){
                                             setState(() {
                                               _fotoatual = asd;
-                                              foto = true;
                                           });
                                           }
                                         }, 
@@ -500,7 +498,7 @@ class _RegistrarState extends State<Registrar> {
                           )
                         )
                       ],
-                      onStepContinue: (){
+                      onStepContinue: () async{
                         if(stepAtual == 0)
                         {
                           setState(() {
@@ -517,7 +515,8 @@ class _RegistrarState extends State<Registrar> {
                           }
                         }
                         else if (stepAtual == 3){
-                          registrar.registrarUsuario("$nome $sobrenome", email, nasc!, _fotoatual, nickname, frase, senha);
+                          registrar.registrarUsuario("$nome $sobrenome", email, Timestamp.fromDate(nasc!), _fotoatual, nickname != "" ? nickname : "$nome $sobrenome", frase, senha);
+                          Navigator.pop(context);
                         }
                         else {
                           setState(() {

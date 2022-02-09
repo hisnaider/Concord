@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/imagens.dart';
 import 'package:concord/Services/models/myuser.dart';
@@ -23,18 +24,6 @@ class Autenticador{
     return _auth.authStateChanges().map((User? user) => _usuariofirebase(user));
     }
 
-  ///Logar como anonimo
-  Future sign() async{
-    try {
-      UserCredential resultado = await _auth.signInAnonymously();
-      User? usuario = resultado.user;
-      return _usuariofirebase(usuario);
-      
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
 
 
   Future logarusuario(/*String nome,*/ String email,/* String birth,*/ String senha) async {
@@ -50,21 +39,33 @@ class Autenticador{
   }
 
 
-  Future registrarUsuario(String nome, String email, DateTime birth, File? foto, String nickname, String frase, String senha,) async {
+  Future registrarUsuario(String nome, String email, Timestamp birth, File? foto, String nickname, String frase, String senha,) async {
     try {
       UserCredential resultado = await _auth.createUserWithEmailAndPassword(email: email, password: senha);
       User? usuario = resultado.user;
 
+      FirebaseFirestore.instance.collection("EmailsCadastrados").doc(email).set({
+        "banido": false,
+        "id": usuario!.uid
+      });
+
+
       String url;
       foto != null 
-        ? url = await img.perfilImage(foto, "Usuarios/${usuario!.uid}/perfil/foto_perfil")
-        : url = await img.perfilImage(null, "Sistema/Sem_foto.npg");
+        ? url = await img.perfilImage(foto, "Usuarios/${usuario.uid}/perfil/foto_perfil")
+        : url = await img.perfilImage(null, "Sistema/Sem_foto.png");
 
      
-        
+      await DatabaseService(uid: usuario.uid).atualizarDadosUser(nome, email, birth, url, nickname, frase);
 
-      await DatabaseService(uid: usuario!.uid).atualizarDadosUser(nome, email, birth, url, nickname, frase);
-
+      FirebaseFirestore.instance.collection("Usuarios").doc(usuario.uid).update({
+        "solicitações": [],
+        "bloqueados": [],
+        "elogios": [],
+        "mostrarAmigos": 0,
+        "mostrarBirth": 0,
+        "mostrarNomeReal": 0,
+      });
 
       return  _usuariofirebase(usuario);
       

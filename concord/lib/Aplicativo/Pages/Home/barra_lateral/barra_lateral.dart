@@ -3,6 +3,11 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Aplicativo/Pages/Home/Home.dart';
+import 'package:concord/Aplicativo/Pages/Home/barra_lateral/Components/editarPerfil.dart';
+import 'package:concord/Aplicativo/Pages/Home/barra_lateral/Components/editarPriv.dart';
+import 'package:concord/Aplicativo/Pages/Home/barra_lateral/Components/mudarNome.dart';
+import 'package:concord/Aplicativo/Pages/Home/barra_lateral/Components/mudarfrase.dart';
+import 'package:concord/Aplicativo/Pages/Home/barra_lateral/Components/sobreApp.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/auth.dart';
 import 'package:concord/Services/database.dart';
@@ -35,9 +40,14 @@ class _BarraLateralState extends State<BarraLateral> {
   bool edit_tema = false;
   bool sobre_app = false;
 
+  int nomeReal = 0;
+
+  List<String> privOptions = ["Todos","Apenas amigos", "Ninguem"];
+
+
   String? _nicknameatual;
   String? _nomeatual;
-  DateTime? _birthatual;
+  Timestamp? _birthatual;
   String? _fotoatual;
   String? _fraseatual;
 
@@ -74,6 +84,8 @@ class _BarraLateralState extends State<BarraLateral> {
     _fotoatual = widget.usuario?.foto;
     _fraseatual = widget.usuario?.frase;
 
+    print(nomeReal);
+
     return BackdropFilter(
                   filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
 
@@ -104,14 +116,9 @@ class _BarraLateralState extends State<BarraLateral> {
                             _fotoatual = asd;
                             
                           });
-                          await widget.database?.atualizarDadosUser(
-                              _nomeatual!, 
-                              widget.usuario!.email,
-                              _birthatual!, 
-                              _fotoatual!,
-                              _nicknameatual!,
-                              _fraseatual!, 
-                            );
+                          await FirebaseFirestore.instance.collection("Usuarios").doc(widget.usuario!.id).update({
+                            "foto": _fotoatual
+                          });
                         }, 
                         icon: Icon(
                           Icons.camera_alt_outlined,
@@ -153,43 +160,10 @@ class _BarraLateralState extends State<BarraLateral> {
                     );
                   },
                 ),
-                Visibility(
-                  visible: edit_perfil,
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(30, 30, 10, 30),
-                    color: Colors.grey[800],
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text("Nome de usuario: "),
-                            Expanded(
-                              flex: 1,
-                              
-                              child: TextFormField(
-                                initialValue: widget.usuario!.nickname,
-                                validator: (val) => val!.isEmpty ? "Digite um nome" : null,
-                                textAlign: TextAlign.left,
-                              
-                                decoration: InputDecoration(
-                                  hintText: "digite o nome",
-                                  isCollapsed: true,
-                                  contentPadding: EdgeInsets.fromLTRB(5, 0, 5, 0),
-                                  ),                                
-                                onChanged: (valor){
-        
-                                  },
-                              ),
-                            ),
-                        ],)
-                      ],
-                    ),
-                  ),
-                ),
+                EditarPerfil(widget.usuario!.frase, edit_perfil, widget.usuario!.nickname),
                 ListTile(
                   leading: Icon(Icons.enhanced_encryption_outlined),
-                  trailing: Icon(Icons.add_outlined),
+                  trailing: edit_privacidade ? Icon(Icons.remove) : Icon(Icons.add_outlined),
                   title: Text("Editar privacidade"),
                   onTap: () {
                     setState(() {
@@ -198,14 +172,7 @@ class _BarraLateralState extends State<BarraLateral> {
                     );
                   },
                 ),
-                Visibility(
-                  visible: edit_privacidade,
-                  child: Container(
-                    height: 50,
-                    color: Colors.grey[800],
-                  ),
-                ),
-    
+                EditarPriv(edit_privacidade, widget.usuario!.mostrarNomeReal, widget.usuario!.mostrarAmigos, widget.usuario!.mostrarBirth),
                 ListTile(
                   leading: Icon(Icons.settings_outlined),
                   trailing: Icon(Icons.add_outlined),
@@ -236,13 +203,7 @@ class _BarraLateralState extends State<BarraLateral> {
                   },
                 ),
                 
-                Visibility(
-                  visible: sobre_app,
-                  child: Container(
-                    height: 50,
-                    color: Colors.grey[800],
-                  ),
-                ),
+                SobreApp(sobre_app),
                 ListTile(
                   leading: Icon(Icons.logout_outlined),
                   title: Text("Deslogar"),
@@ -253,6 +214,17 @@ class _BarraLateralState extends State<BarraLateral> {
                     );
                   },
                 ),
+                Expanded(flex: 1,child: SizedBox(),),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+                  child: Align(
+                    alignment: Alignment.bottomLeft,
+                    child: Text(
+                      "UID: ${widget.usuario!.id}",
+                      style: TextStyle(fontSize: 15, color: cor_texto.withOpacity(0.2)),
+                    )
+                  ),
+                )
               ],
             )
           ),

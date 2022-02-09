@@ -7,19 +7,18 @@ class Solicitacoes{
   Solicitacoes();
   
   final CollectionReference usuariosCollection = FirebaseFirestore.instance.collection("Usuarios");
-  final Stream<UserData> usera = DatabaseService(uid: uid!).userData;
   
 
   Future enviarSolic(String id) async {
     return await usuariosCollection.doc(id).update({
-      "Solicitações": FieldValue.arrayUnion([uid])
+      "solicitações": FieldValue.arrayUnion([uid])
       }
     );
   }
 
   Future rejeitarsolic(String id) async {
     return await usuariosCollection.doc(uid).update({
-      "Solicitações": FieldValue.arrayRemove([id])
+      "solicitações": FieldValue.arrayRemove([id])
       }
     );
   }
@@ -27,11 +26,11 @@ class Solicitacoes{
   Future aceitarsolic(String id) async {
     return await usuariosCollection.doc(id).get().then((e) async {
       await usuariosCollection.doc(id).update({
-        "Solicitações": FieldValue.arrayRemove([uid])
+        "solicitações": FieldValue.arrayRemove([uid])
         }
       );
       await usuariosCollection.doc(uid).update({
-        "Solicitações": FieldValue.arrayRemove([id])
+        "solicitações": FieldValue.arrayRemove([id])
         }
       );
       await usuariosCollection.doc(id).collection("Amigos").doc(uid).set({

@@ -1,10 +1,11 @@
 
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:concord/Aplicativo/Pages/Home/listaAmigos/listaAmigos.dart';
-import 'package:concord/Services/models/addamigo.dart';
 import 'package:concord/Services/models/amigos.dart';
 import 'package:concord/Services/models/contatos.dart';
-import 'package:concord/Services/models/listaamigos.dart';
+import 'package:concord/Services/models/conversamodel.dart';
+import 'package:concord/Services/models/mensagemModel.dart';
 import 'package:concord/Services/models/myuser.dart';
 
 import 'models/solicuser.dart';
@@ -16,14 +17,14 @@ class DatabaseService {
 
   final CollectionReference usuariosCollection = FirebaseFirestore.instance.collection("Usuarios");
 
-  Future atualizarDadosUser(String nome, String email, DateTime birth, String foto, String nickname, String frase) async {
+  Future atualizarDadosUser(String nome, String email, Timestamp birth, String foto, String nickname, String frase) async {
     return await usuariosCollection.doc(uid).set({
       "nome": nome,
       "email": email,
       "birth": birth,
       "foto": foto,
       "nickname": nickname,
-      "frase": frase
+      "frase": frase,
       }
     );
   }
@@ -34,10 +35,15 @@ class DatabaseService {
     return snapshot.docs.map((e) {
       return ContatoUser(
         foto: e.get("foto") ?? "",
-        nome: e.get("nome") ?? "",
+        nickname: e.get("nickname") ?? "",
         birth: e.get("birth") ?? "",
         id: e.id,
-        frase: e.get("frase")
+        frase: e.get("frase"),
+        elogios: e.get("elogios"),
+        nome: e.get("nome"),
+        mostrarAmigos: e.get("mostrarAmigos"),
+        mostrarBirth: e.get("mostrarBirth"),
+        mostrarNomeReal: e.get("mostrarNomeReal"),
         );
     }).toList();
   }
@@ -46,29 +52,25 @@ class DatabaseService {
     return UserData(
       id: snapshot.id,
       nickname: snapshot["nickname"] ?? "",
-      nome: snapshot["nome"],
+      nome: snapshot["nome"] ?? "",
       email: snapshot["email"] ?? "",
       birth: snapshot["birth"] ?? "",
-      foto: snapshot["foto"],
-      frase: snapshot["frase"]
+      foto: snapshot["foto"] ?? "",
+      frase: snapshot["frase"] ?? "",
+      elogios: snapshot["elogios"] ?? "",
+      mostrarAmigos: snapshot["mostrarAmigos"] ?? 0,
+      mostrarBirth: snapshot["mostrarBirth"] ?? 0,
+      mostrarNomeReal: snapshot["mostrarNomeReal"] ?? 0,
       
     );
   }
 
 
-  List<AddUser> _listaAddUser(QuerySnapshot snapshot){
-    return snapshot.docs.map((e) {
-      return AddUser(
-        foto: e.get("foto") ?? "",
-        nome: e.get("nome") ?? "",
-        id: e.id
-        );
-    }).toList();
-  }
+
 
   SolicUser _listaSolicUser(DocumentSnapshot snapshot){
     return SolicUser(
-      solic: snapshot["Solicitações"]
+      solic: snapshot["solicitações"]
     );
   }
   bool _listaAmigos(DocumentSnapshot snapshot){
@@ -77,7 +79,6 @@ class DatabaseService {
 
   List<AmigosUser> _amigos(QuerySnapshot snapshot){
     return snapshot.docs.map((e) {
-
       return AmigosUser(
         amigosDesde: e.get("amigos-desde"),
         apelido: e.get("apelido"),
@@ -96,9 +97,38 @@ class DatabaseService {
       email: snapshot["email"],
       birth: snapshot["birth"],
       foto: snapshot["foto"],
-      frase: snapshot["frase"]
-      
+      frase: snapshot["frase"],
+      elogios: snapshot["elogios"] ?? "",
+      mostrarAmigos: snapshot["mostrarAmigos"] ?? 0,
+      mostrarBirth: snapshot["mostrarBirth"] ?? 0,
+      mostrarNomeReal: snapshot["mostrarNomeReal"] ?? 0,
     );
+  }
+
+
+  List<MensagemModel> _mensagens(QuerySnapshot snapshot){
+    return snapshot.docs.map((e) {
+      return MensagemModel(
+        data: e.get("data"),
+        mensagem: e.get("mensagem"),
+        reacao: e.get("reacao"),
+        id: e.get("id"),
+        visto: e.get("visto")
+        );
+    }).toList();
+    
+  }
+
+  List<ConversaModel> _conversas(QuerySnapshot snapshot){
+    return snapshot.docs.map((e) {
+      return ConversaModel(
+        ultimaMensagem: e.get("ultimaMensagem"),
+        id: e.id,
+        quemMandou: e.get("quemMandou")
+        
+        );
+    }).toList();
+    
   }
 
 
@@ -114,7 +144,7 @@ class DatabaseService {
     return usuariosCollection.doc(uid).snapshots().map(_userDataSnapshot);
   }
   Stream<List<ContatoUser>> addUser(String nome){
-    return usuariosCollection.where("nome", isGreaterThanOrEqualTo: nome).where("nome", isLessThanOrEqualTo: nome+"z").snapshots().map(_listaContatosUser);
+    return usuariosCollection.where("nickname", isGreaterThanOrEqualTo: nome).where("nickname", isLessThanOrEqualTo: nome+"z").snapshots().map(_listaContatosUser);
   }
   Stream<SolicUser> solicUser(){
     return usuariosCollection.doc(uid).snapshots().map(_listaSolicUser);
@@ -127,4 +157,11 @@ class DatabaseService {
     return usuariosCollection.doc(id).snapshots().map(_otherUserDataSnapshot);
   }
 
+  Stream<List<MensagemModel>> mensagens(String id){
+    return usuariosCollection.doc(uid).collection("Conversas").doc(id).collection("Mensagens").snapshots().map(_mensagens);
+  }
+
+  Stream<List<ConversaModel>> get conversas{
+    return usuariosCollection.doc(uid).collection("Conversas").snapshots().map(_conversas);
+  }
 }
