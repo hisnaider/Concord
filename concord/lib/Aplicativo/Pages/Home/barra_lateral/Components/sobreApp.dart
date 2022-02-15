@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SobreApp extends StatelessWidget {
-  bool mostrar;
+  final bool mostrar;
   SobreApp(this.mostrar,{ Key? key }) : super(key: key);
 
   @override

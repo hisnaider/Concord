@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class MudarNome extends StatefulWidget {
   final String nickname;
@@ -57,7 +56,7 @@ class _MudarNomeState extends State<MudarNome> {
                     opacity: novonome.length == 0 || novonome == this.widget.nickname ? 0.3 : 1,
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
-                        backgroundColor: cor_primaria,
+                        backgroundColor: corPrimaria,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(90))
                          
@@ -69,7 +68,7 @@ class _MudarNomeState extends State<MudarNome> {
                         Navigator.pop(context);
                       },
                       icon: Icon(Icons.done, color: Colors.white,),
-                      label: Text("Confirmar",style: TextStyle(color: cor_texto),)),
+                      label: Text("Confirmar",style: TextStyle(color: corTexto),)),
                   ),
                 ],
               ),

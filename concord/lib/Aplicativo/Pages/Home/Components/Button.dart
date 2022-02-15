@@ -5,7 +5,7 @@ ButtonStyle button(conversa) => TextButton.styleFrom(
   padding: EdgeInsets.zero,
   minimumSize: Size(0,50),
   primary: Colors.white,
-  backgroundColor: conversa == true ? cor_primaria : Colors.grey[800],
+  backgroundColor: conversa == true ? corPrimaria : Colors.grey[800],
   textStyle: TextStyle(fontSize: 20),
   shape: RoundedRectangleBorder(
     borderRadius:BorderRadius.only(

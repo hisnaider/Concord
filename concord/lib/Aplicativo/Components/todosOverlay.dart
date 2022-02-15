@@ -4,7 +4,6 @@ import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/models/amigos.dart';
-import 'package:concord/Services/models/contatos.dart';
 import 'package:concord/Services/models/myuser.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -47,7 +46,7 @@ import 'package:intl/intl.dart';
 
 
 class FullscreenImage extends StatelessWidget {
-  final String foto;
+  final ImageProvider foto;
   FullscreenImage({required this.foto});
 
   @override
@@ -71,7 +70,7 @@ class FullscreenImage extends StatelessWidget {
                 child: Container(
                   margin: EdgeInsets.all(10),
                   child: Image(
-                    image: NetworkImage(foto),
+                    image: foto,
                     fit: BoxFit.contain,
                   )
                 ),
@@ -85,7 +84,7 @@ class FullscreenImage extends StatelessWidget {
 }
 
 class PerfilUser extends StatelessWidget {
-  final String foto;
+  final ImageProvider foto;
   final String nickname;
   final String frase;
   final String id;
@@ -143,15 +142,15 @@ class PerfilUser extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 //image: FileImage(_fotos),
-                                image: NetworkImage(this.foto),
+                                image: this.foto,
                                 fit: BoxFit.cover,
-                                colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
+                                colorFilter: ColorFilter.mode(corPrimaria.withOpacity(0.9), BlendMode.multiply)
                               )   
                             ),
                             child: Center(
                               child: CircleAvatar(
                                 radius: 50,
-                                backgroundImage: NetworkImage(this.foto),
+                                backgroundImage: this.foto,
                               ),
                             )
                           ),
@@ -222,7 +221,7 @@ class PerfilUser extends StatelessWidget {
                                     itemBuilder: (BuildContext context, int index) {
                                       
                                       return StreamBuilder<UserData>(
-                                        stream: DatabaseService(uid: this.id).otherUserData(amigos[index].id),
+                                        stream: DatabaseService(uid: this.id).otherUserData(amigos[index].uid),
                                         builder: (context, snapshot) {
                                           final amigouser = snapshot.data;
                                           if(snapshot.hasData){

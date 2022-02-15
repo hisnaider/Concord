@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
+import 'package:concord/Aplicativo/Components/todosOverlay.dart';
 import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/models/myuser.dart';
-import 'package:concord/Services/models/solicuser.dart';
 import 'package:concord/Services/solicitacoes.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SolicCard extends StatelessWidget {
@@ -29,9 +29,24 @@ class SolicCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Row(
                 children: [
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundImage: NetworkImage(contato!.foto),
+                  
+                  CachedNetworkImage(
+                    imageUrl: contato!.foto,
+                    placeholder: (context, imageProvider) =>
+                      CircleAvatar(
+                        radius: 35,
+                        backgroundColor: Colors.orange[200],
+                      ),
+                    imageBuilder: (context, imageProvider) =>
+                      GestureDetector(
+                        child: CircleAvatar(
+                          radius: 35,
+                          backgroundImage: imageProvider
+                        ),
+                        onTap: (){
+                          Navigator.of(context).push(PageRouteBuilder(barrierDismissible: true,opaque: false,pageBuilder: (_, __, ___) => FullscreenImage(foto:imageProvider)));
+                        },
+                      ),
                   ),
                   Expanded(
                     flex: 1,

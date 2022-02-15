@@ -68,7 +68,7 @@ class _MudarFraseState extends State<MudarFrase> {
                     opacity: frase.length == 0 || frase == this.widget.frase ? 0.3 : 1,
                     child: TextButton.icon(
                       style: TextButton.styleFrom(
-                        backgroundColor: cor_primaria,
+                        backgroundColor: corPrimaria,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(90))
                          
@@ -80,7 +80,7 @@ class _MudarFraseState extends State<MudarFrase> {
                         Navigator.pop(context);
                       },
                       icon: Icon(Icons.done, color: Colors.white,),
-                      label: Text("Confirmar",style: TextStyle(color: cor_texto),)),
+                      label: Text("Confirmar",style: TextStyle(color: corTexto),)),
                   ),
                 ],
               ),

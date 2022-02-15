@@ -19,19 +19,11 @@ class App extends StatelessWidget {
         title: "nome",
         theme: ThemeData(
 
-          primaryColor: cor_primaria,
+          primaryColor: corPrimaria,
           brightness: Brightness.dark
         ),
         home: Wrapper()
         )
       );
-        /*routes: {
-          "/": (context) => Home(),
-          "/Login": (context) => Login(),
-          "/Register": (context) => Registrar(),
-        },*/
-        
-      
-    
   }
 }

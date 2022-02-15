@@ -1,5 +1,3 @@
-import 'package:provider/provider.dart';
-
 class AddUser{
   final String nome;
   final String foto;

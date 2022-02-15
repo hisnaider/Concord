@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Config/geral.dart';
-import 'package:concord/Services/database.dart';
-import 'package:concord/Services/models/myuser.dart';
 
 class Solicitacoes{
   Solicitacoes();
@@ -35,7 +33,7 @@ class Solicitacoes{
       );
       await usuariosCollection.doc(id).collection("Amigos").doc(uid).set({
         "id": uid,
-        "apelido": nome_user,
+        "apelido": nomeUser,
         "melhores-amigos": false,
         "relação": "Amigos",
         "amigos-desde": DateTime.now()

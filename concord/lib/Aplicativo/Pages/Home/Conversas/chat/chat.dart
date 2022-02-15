@@ -6,10 +6,9 @@ import 'package:concord/Services/mensagens.dart';
 import 'package:concord/Services/models/mensagemModel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter/widgets.dart';
 
 class Chat extends StatefulWidget {
-  final String foto;
+  final ImageProvider foto;
   final String nome;
   final String id;
   const Chat({ Key? key, required this.foto, required this.nome, required this.id }) : super(key: key);
@@ -41,11 +40,11 @@ class _ChatState extends State<Chat> {
           final mensagens = snapshot.data!;
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: cor_primaria,
+              backgroundColor: corPrimaria,
               title: Container(
                 child: Row(
                   children: [
-                    CircleAvatar(backgroundImage: NetworkImage(widget.foto)),
+                    CircleAvatar(backgroundImage: widget.foto),
                     Padding(
                       padding: const EdgeInsets.only(left: 10),
                       child: Text(widget.nome,style: TextStyle(fontSize: 15),),
@@ -81,7 +80,7 @@ class _ChatState extends State<Chat> {
                 ),
                 Container(
                   width:double.infinity,
-                  color: cor_primaria,
+                  color: corPrimaria,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Row(

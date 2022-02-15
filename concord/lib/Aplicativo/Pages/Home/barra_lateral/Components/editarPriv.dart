@@ -3,13 +3,13 @@ import 'package:concord/Config/geral.dart';
 import 'package:flutter/material.dart';
 
 class EditarPriv extends StatelessWidget {
-  bool mostrar;
-  int optionNome;
-  int optionAmigo;
-  int optionBirth;
+  final bool mostrar;
+  final int optionNome;
+  final int optionAmigo;
+  final int optionBirth;
   EditarPriv(this.mostrar, this.optionNome,this.optionAmigo,this.optionBirth,{ Key? key }) : super(key: key);
 
-  List<String> privOptions = ["Todos","Apenas amigos", "Ninguem"];
+  final List<String> privOptions = ["Todos","Apenas amigos", "Ninguem"];
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,7 @@ class EditarPriv extends StatelessWidget {
                               e,
                               style: TextStyle(
                                 fontSize: 15,
-                                color: cor_primaria,
+                                color: corPrimaria,
                                 fontWeight: FontWeight.w500,
                                 
                               ),
@@ -104,7 +104,7 @@ class EditarPriv extends StatelessWidget {
                               e,
                               style: TextStyle(
                                 fontSize: 15,
-                                color: cor_primaria,
+                                color: corPrimaria,
                                 fontWeight: FontWeight.w500,
                                 
                               ),
@@ -152,7 +152,7 @@ class EditarPriv extends StatelessWidget {
                               e,
                               style: TextStyle(
                                 fontSize: 15,
-                                color: cor_primaria,
+                                color: corPrimaria,
                                 fontWeight: FontWeight.w500,
                                 
                               ),

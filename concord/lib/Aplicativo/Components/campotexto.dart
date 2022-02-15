@@ -20,7 +20,7 @@ Widget icone(icon) => Padding(padding:
               EdgeInsets.zero,
               child: Icon(
                 icon,
-                color: cor_primaria,
+                color: corPrimaria,
                 size: 25,
               )
             );

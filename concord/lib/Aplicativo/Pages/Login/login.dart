@@ -43,7 +43,7 @@ class _LoginState extends State<Login> {
             flex: 1,
             child: Stack(
               children: [
-                Container(color: cor_primaria,),
+                Container(color: corPrimaria,),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -124,7 +124,7 @@ class _LoginState extends State<Login> {
                           padding: EdgeInsets.symmetric(horizontal: 20),
                           width: 150,
                           height: 40,
-                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: cor_primaria),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(90),color: corPrimaria),
                             child: Center(
                               child: Text("Entrar",style: TextStyle(fontSize: 22,color: Colors.black),
                               )

@@ -2,18 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/imagens.dart';
 import 'package:concord/Services/models/myuser.dart';
+import 'package:concord/Services/notifica%C3%A7%C3%B5es.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 
 
 class Autenticador{
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Notif _notif = Notif();
 
   Myuser? _usuariofirebase(User? usuario){
-    return usuario != null ? Myuser(id: usuario.uid) : null;
+    return usuario != null ? Myuser(uid: usuario.uid) : null;
   }
 
   DatabaseImagens img = DatabaseImagens();
@@ -30,6 +29,7 @@ class Autenticador{
     try {
       UserCredential resultado = await _auth.signInWithEmailAndPassword(email: email, password: senha);
       User? usuario = resultado.user;
+      await _notif.salvarToken();
       return  _usuariofirebase(usuario);
       
     } catch (e) {

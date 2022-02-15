@@ -1,6 +1,3 @@
-
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Services/models/amigos.dart';
 import 'package:concord/Services/models/contatos.dart';
@@ -82,7 +79,7 @@ class DatabaseService {
       return AmigosUser(
         amigosDesde: e.get("amigos-desde"),
         apelido: e.get("apelido"),
-        id: e.get("id"),
+        uid: e.get("id"),
         melhoresAmigos: e.get("melhores-amigos"),
         relacao: e.get("relação")
         );

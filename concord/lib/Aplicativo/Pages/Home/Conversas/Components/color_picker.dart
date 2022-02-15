@@ -9,14 +9,14 @@ class TrocarCor extends StatefulWidget {
   _TrocarCorState createState() => _TrocarCorState();
 }
 
-  bool color_picker = false;
+  final bool colorPicker = false;
 
 
 class _TrocarCorState extends State<TrocarCor> {
   @override
   Widget build(BuildContext context) {
     return Visibility(
-            visible: color_picker,
+            visible: colorPicker,
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -29,7 +29,7 @@ class _TrocarCorState extends State<TrocarCor> {
                   child: Container(
                     width: 250,
                     child: ColorPicker(
-                      pickerColor: cor_primaria,
+                      pickerColor: corPrimaria,
                       colorPickerWidth: 300,
                       pickerAreaHeightPercent: 0.4,
                       enableAlpha: false,
@@ -37,7 +37,7 @@ class _TrocarCorState extends State<TrocarCor> {
                       pickerAreaBorderRadius: BorderRadius.all(Radius.circular(5)),
                       onColorChanged: (Color value) {
                         setState(() {
-                          trocar_cor_primaria(value);
+                          trocarCorPrimaria(value);
                           }
                         );
                       },

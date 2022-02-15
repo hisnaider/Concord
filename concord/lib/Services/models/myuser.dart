@@ -1,8 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Myuser{
-  final String id;
-  Myuser({required this.id});
+  int id = 0;
+  final String uid;
+  String? nome;
+  String? email;
+  Timestamp? birth;
+  String? foto;
+  String? frase;
+  List<dynamic>? elogios;
+  int? mostrarAmigos;
+  int? mostrarBirth;
+  int? mostrarNomeReal;
+  Myuser({required this.uid});
 }
 
 class UserData{

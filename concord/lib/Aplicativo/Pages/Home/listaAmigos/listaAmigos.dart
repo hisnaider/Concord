@@ -1,6 +1,5 @@
 import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Aplicativo/Pages/Home/listaAmigos/Components/AmigosCard.dart';
-import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/database.dart';
 import 'package:concord/Services/models/amigos.dart';
 import 'package:flutter/material.dart';

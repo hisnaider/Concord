@@ -4,9 +4,9 @@ import 'package:concord/Config/geral.dart';
 import 'package:flutter/material.dart';
 
 class EditarPerfil extends StatelessWidget {
-  String frase;
-  bool mostrar;
-  String nickname;
+  final String frase;
+  final bool mostrar;
+  final String nickname;
   EditarPerfil(this.frase,this.mostrar,this.nickname,{ Key? key }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class EditarPerfil extends StatelessWidget {
                       ),
                       child: Text(
                         this.nickname,
-                        style: TextStyle(color: cor_primaria),
+                        style: TextStyle(color: corPrimaria),
                       )
                     ),
                   ),
@@ -74,7 +74,7 @@ class EditarPerfil extends StatelessWidget {
                     ),
                     child: Text(
                       this.frase,
-                      style: TextStyle(color: cor_primaria),
+                      style: TextStyle(color: corPrimaria),
                     )
                   ),
                 ),

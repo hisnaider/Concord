@@ -2,7 +2,6 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Services/imagens.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:intl/intl.dart';
 
 import 'package:concord/Aplicativo/Components/campotexto.dart';
@@ -56,12 +55,11 @@ class _RegistrarState extends State<Registrar> {
   }
 
   Future enviarImagem(String endereco) async {
-    Reference ref = FirebaseStorage.instance.ref().child(endereco);
     await img.salvarimagem(_fotoatual!, endereco);
 
   }
 
-  int Idade(){
+  int _idade(){
     int anos = DateTime.now().year - nasc!.year;
     int meses = DateTime.now().month - nasc!.month;
     int dias = DateTime.now().day - nasc!.day;
@@ -73,7 +71,7 @@ class _RegistrarState extends State<Registrar> {
   Widget build(BuildContext context) {
     ImageProvider<Object> colocarImagem(){
       if (_fotoatual != null) return FileImage(_fotoatual!);
-      else return NetworkImage(sem_foto);
+      else return NetworkImage(semFoto);
     }
     FirebaseFirestore.instance.collection("EmailsCadastrados").doc(email == "" ? " " : email).get().then((value) => emailExiste = value.exists);
     return carregando ? TelaDeLoading() : Material(
@@ -92,11 +90,11 @@ class _RegistrarState extends State<Registrar> {
                           children: [
                             TextButton(
                               onPressed: stepAtual > 0 ? details.onStepCancel : null, 
-                              child: Text(stepAtual > 0 ? "Voltar" : "", style: TextStyle(fontSize: 25, color: cor_primaria),)
+                              child: Text(stepAtual > 0 ? "Voltar" : "", style: TextStyle(fontSize: 25, color: corPrimaria),)
                             ),
                             TextButton(
                               onPressed: details.onStepContinue, 
-                              child: Text(stepAtual < 3 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: cor_primaria))
+                              child: Text(stepAtual < 3 ?"Avançar" : "Registrar", style: TextStyle(fontSize: 25, color: corPrimaria))
                             ),
                           ],
                         );
@@ -230,8 +228,8 @@ class _RegistrarState extends State<Registrar> {
                                         ),
                                         Column(
                                           children: [
-                                            Text("Data de nascimento*",style: TextStyle(color: idade > 12 ? cor_texto : Colors.red[700]),),
-                                            Text(DateFormat('dd/MM/yyyy').format(nasc!),style: TextStyle(fontSize: 25, color: idade> 12 ? cor_texto : Colors.red[700]),),
+                                            Text("Data de nascimento*",style: TextStyle(color: idade > 12 ? corTexto : Colors.red[700]),),
+                                            Text(DateFormat('dd/MM/yyyy').format(nasc!),style: TextStyle(fontSize: 25, color: idade> 12 ? corTexto : Colors.red[700]),),
                                           ],
                                         ),
                                       ]
@@ -318,7 +316,7 @@ class _RegistrarState extends State<Registrar> {
                                           //image: FileImage(_fotos),
                                           image: colocarImagem(),
                                           fit: BoxFit.cover,
-                                          colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
+                                          colorFilter: ColorFilter.mode(corPrimaria.withOpacity(0.9), BlendMode.multiply)
                                         )   
                                       ),
                                       child: Center(
@@ -458,7 +456,7 @@ class _RegistrarState extends State<Registrar> {
                                       //image: FileImage(_fotos),
                                       image: colocarImagem(),
                                       fit: BoxFit.cover,
-                                      colorFilter: ColorFilter.mode(cor_primaria.withOpacity(0.9), BlendMode.multiply)
+                                      colorFilter: ColorFilter.mode(corPrimaria.withOpacity(0.9), BlendMode.multiply)
                                     )   
                                   ),
                                   child: Center(
@@ -502,7 +500,7 @@ class _RegistrarState extends State<Registrar> {
                         if(stepAtual == 0)
                         {
                           setState(() {
-                          idade = Idade();
+                          idade = _idade();
                           
 
                         });

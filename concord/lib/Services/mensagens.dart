@@ -1,7 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:concord/Config/geral.dart';
-import 'package:concord/Services/database.dart';
-import 'package:concord/Services/models/myuser.dart';
 
 class Mensagens{
   Mensagens();

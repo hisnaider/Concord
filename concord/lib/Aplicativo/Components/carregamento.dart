@@ -13,12 +13,12 @@ class TelaDeLoading extends StatelessWidget {
         child: Stack(
           children: [
           SpinKitRing(
-            color: cor_primaria,
+            color: corPrimaria,
             size: 150,
             lineWidth: 2,
           ),
           SpinKitPouringHourGlassRefined(
-            color: cor_primaria,
+            color: corPrimaria,
             size:75,
           )
           ]

@@ -4,7 +4,6 @@ import 'package:concord/Aplicativo/Components/campotexto.dart';
 import 'package:concord/Aplicativo/Components/carregamento.dart';
 import 'package:concord/Aplicativo/Pages/Home/addAmigo/Components/solic_card.dart';
 import 'package:concord/Config/geral.dart';
-import 'package:concord/Services/models/addamigo.dart';
 import 'package:concord/Services/models/contatos.dart';
 import 'package:concord/Services/models/solicuser.dart';
 import 'package:concord/Services/database.dart';

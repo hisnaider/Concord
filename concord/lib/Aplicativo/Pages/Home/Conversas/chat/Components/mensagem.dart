@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:concord/Config/geral.dart';
 import 'package:concord/Services/models/mensagemModel.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
