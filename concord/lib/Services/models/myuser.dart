@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+
 class Myuser{
-  int id = 0;
   final String uid;
   String? nome;
   String? email;
